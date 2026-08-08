@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { QRCodeSVG } from "qrcode.react";
-import Image from "next/image";
 
 export default function ChecklistMotorista() {
   const [placa, setPlaca] = useState("");
@@ -39,9 +38,6 @@ export default function ChecklistMotorista() {
   const [observacoes, setObservacoes] = useState("");
   const [enviado, setEnviado] = useState(false);
   const [mostrarQrCode, setMostrarQrCode] = useState(false);
-  
-  // Estado para controlar se a logo carregou com sucesso
-  const [erroLogo, setErroLogo] = useState(false);
 
   const calcularDadosPosto = () => {
     const kmAnt = parseFloat(kmAnteriorAbast);
@@ -107,23 +103,25 @@ export default function ChecklistMotorista() {
     <main className="min-h-screen bg-[#070b14] p-4 sm:p-8 text-slate-100 flex items-center justify-center font-sans">
       <div className="max-w-4xl w-full bg-[#0e1626] rounded-3xl shadow-2xl p-6 sm:p-10 border border-[#1b2a4a]">
         
-        {/* CABEÇALHO */}
+        {/* CABEÇALHO COM MARCA D'ÁGUA NJ */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 pb-6 border-b border-[#1b2a4a]">
           <div className="flex items-center gap-4">
-            <div className="bg-white p-2 rounded-2xl border border-[#23427f] flex items-center justify-center w-28 h-20 relative shadow-md overflow-hidden">
-              {!erroLogo ? (
-                <Image 
-                  src="/logo.png" 
-                  alt="Logo NJ Transportes" 
-                  fill
-                  className="object-contain p-1"
-                  priority
-                  onError={() => setErroLogo(true)}
-                />
-              ) : (
-                <span className="text-2xl" title="Coloque sua logo.png na pasta public">🚚</span>
-              )}
+            
+            {/* Marca d'água NJ Estilizada */}
+            <div className="relative bg-gradient-to-br from-blue-600/20 to-blue-900/40 p-3 rounded-2xl border border-blue-500/30 flex items-center justify-center w-20 h-20 shadow-inner overflow-hidden shrink-0">
+              <span className="absolute text-4xl font-black text-blue-500/10 select-none tracking-tighter">
+                NJ
+              </span>
+              <div className="flex flex-col items-center justify-center z-10">
+                <span className="text-xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-200">
+                  NJ
+                </span>
+                <span className="text-[9px] font-bold tracking-widest text-blue-400/80 uppercase">
+                  Frota
+                </span>
+              </div>
             </div>
+
             <div>
               <h1 className="text-xl sm:text-2xl font-extrabold text-white tracking-wide">
                 NJ TRANSPORTES
