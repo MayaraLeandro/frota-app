@@ -19,12 +19,14 @@ export default function ChecklistMotorista() {
   const [fotoParaBrisas, setFotoParaBrisas] = useState<string | null>(null);
   const [fotoFunilaria, setFotoFunilaria] = useState<string | null>(null);
 
-  // Estados do Posto / Abastecimento
+  // Estados Separados do Posto / Abastecimento e Custos
+  const [kmAnteriorAbast, setKmAnteriorAbast] = useState("");
   const [kmAbastecimento, setKmAbastecimento] = useState("");
   const [litrosAbastecidos, setLitrosAbastecidos] = useState("");
+  const [precoTotalCombustivel, setPrecoTotalCombustivel] = useState("");
+  const [precoTotalOleo, setPrecoTotalOleo] = useState("");
   const [localizacaoPosto, setLocalizacaoPosto] = useState("");
   const [buscandoLocal, setBuscandoLocal] = useState(false);
-  const [custoOleoViagem, setCustoOleoViagem] = useState("");
 
   const [manutencaoNecessaria, setManutencaoNecessaria] = useState("nao");
   const [detalhesManutencao, setDetalhesManutencao] = useState("");
@@ -37,23 +39,32 @@ export default function ChecklistMotorista() {
   const [enviado, setEnviado] = useState(false);
   const [mostrarQrCode, setMostrarQrCode] = useState(false);
 
-  // Cálculo automático da média (KM atual - KM anterior ou KM do abastecimento vs KM inicial)
-  const calcularMedia = () => {
-    const kmAtualNum = parseFloat(km);
-    const kmAbastNum = parseFloat(kmAbastecimento);
-    const litrosNum = parseFloat(litrosAbastecidos);
+  // Cálculos Automáticos
+  const calcularDadosPosto = () => {
+    const kmAnt = parseFloat(kmAnteriorAbast);
+    const kmAtu = parseFloat(kmAbastecimento);
+    const litros = parseFloat(litrosAbastecidos);
+    const custoComb = parseFloat(precoTotalCombustivel) || 0;
+    const custoOleo = parseFloat(precoTotalOleo) || 0;
 
-    if (!litrosNum || litrosNum <= 0) return "0.00";
-
-    // Se informou o KM do abastecimento e o KM atual do veículo
-    if (kmAtualNum && kmAbastNum && kmAtualNum >= kmAbastNum) {
-      const rodados = kmAtualNum - kmAbastNum;
-      return (rodados / litrosNum).toFixed(2);
+    let kmRodados = 0;
+    if (kmAnt && kmAtu && kmAtu >= kmAnt) {
+      kmRodados = kmAtu - kmAnt;
     }
-    return "0.00";
+
+    // Média de consumo (KM/L)
+    const mediaConsumo = (kmRodados > 0 && litros > 0) ? (kmRodados / litros).toFixed(2) : "0.00";
+
+    // Custo por KM rodado de Combustível (R$/KM)
+    const custoKmCombustivel = (kmRodados > 0 && custoComb > 0) ? (custoComb / kmRodados).toFixed(2) : "0.00";
+
+    // Custo por KM rodado de Óleo (R$/KM)
+    const custoKmOleo = (kmRodados > 0 && custoOleo > 0) ? (custoOleo / kmRodados).toFixed(2) : "0.00";
+
+    return { kmRodados, mediaConsumo, custoKmCombustivel, custoKmOleo };
   };
 
-  const mediaCalculada = calcularMedia();
+  const dadosCalculados = calcularDadosPosto();
 
   const obterLocalizacaoGPS = () => {
     if (!navigator.geolocation) {
@@ -131,7 +142,7 @@ export default function ChecklistMotorista() {
         {enviado ? (
           <div className="bg-emerald-950/40 border border-emerald-500/30 text-emerald-300 p-8 rounded-2xl text-center">
             <h2 className="font-bold text-2xl mb-2">Checklist e Posto Registrados com Sucesso!</h2>
-            <p className="text-sm text-emerald-400/80 mb-6">Os dados da viagem e abastecimento foram salvos.</p>
+            <p className="text-sm text-emerald-400/80 mb-6">Os dados de custos e abastecimento foram computados.</p>
             <button
               onClick={() => setEnviado(false)}
               className="bg-emerald-600 hover:bg-emerald-500 text-white px-6 py-3 rounded-xl font-semibold text-sm transition shadow-lg"
@@ -282,16 +293,28 @@ export default function ChecklistMotorista() {
               </div>
             </div>
 
-            {/* NOVO CARD: Parada no Posto e Abastecimento */}
+            {/* CARD: Parada no Posto, Abastecimento e Custos Separados */}
             <div className="bg-slate-900/50 p-5 rounded-2xl border border-slate-800/80 space-y-4">
               <h2 className="font-bold text-sm uppercase tracking-wider text-blue-400 mb-3 flex items-center gap-2">
-                ⛽ Parada no Posto / Abastecimento
+                ⛽ Parada no Posto e Controle de Custos
               </h2>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div>
                   <label className="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">
-                    KM do Abastecimento
+                    KM Anterior (Abast.)
+                  </label>
+                  <input
+                    type="number"
+                    placeholder="Ex: 149000"
+                    value={kmAnteriorAbast}
+                    onChange={(e) => setKmAnteriorAbast(e.target.value)}
+                    className="w-full p-3 bg-slate-800 border border-slate-700 rounded-xl text-sm text-white focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-slate-500 font-semibold"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">
+                    KM Atual Abastecimento
                   </label>
                   <input
                     type="number"
@@ -303,7 +326,7 @@ export default function ChecklistMotorista() {
                 </div>
                 <div>
                   <label className="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">
-                    Litros Abastecidos
+                    Litros de Combustível
                   </label>
                   <input
                     type="number"
@@ -316,53 +339,74 @@ export default function ChecklistMotorista() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div>
                   <label className="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">
-                    Localização do Posto (GPS)
+                    Preço Combustível (R$)
+                  </label>
+                  <input
+                    type="number"
+                    step="0.01"
+                    placeholder="Ex: 850.00"
+                    value={precoTotalCombustivel}
+                    onChange={(e) => setPrecoTotalCombustivel(e.target.value)}
+                    className="w-full p-3 bg-slate-800 border border-slate-700 rounded-xl text-sm text-white focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-slate-500 font-semibold"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">
+                    Preço Óleo do Motor (R$)
+                  </label>
+                  <input
+                    type="number"
+                    step="0.01"
+                    placeholder="Ex: 120.00"
+                    value={precoTotalOleo}
+                    onChange={(e) => setPrecoTotalOleo(e.target.value)}
+                    className="w-full p-3 bg-slate-800 border border-slate-700 rounded-xl text-sm text-white focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-slate-500 font-semibold"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">
+                    Localização (Maps / GPS)
                   </label>
                   <div className="flex gap-2">
                     <input
                       type="text"
                       readOnly
-                      placeholder="Clique no botão ao lado"
+                      placeholder="Obter GPS"
                       value={localizacaoPosto}
                       className="w-full p-3 bg-slate-800 border border-slate-700 rounded-xl text-xs text-slate-300 focus:outline-none"
                     />
                     <button
                       type="button"
                       onClick={obterLocalizacaoGPS}
-                      className="bg-blue-600 hover:bg-blue-500 text-white px-4 rounded-xl text-xs font-semibold transition shrink-0"
+                      className="bg-blue-600 hover:bg-blue-500 text-white px-3 rounded-xl text-xs font-semibold transition shrink-0"
                     >
-                      {buscandoLocal ? "Buscando..." : "📍 Maps"}
+                      {buscandoLocal ? "..." : "📍 Maps"}
                     </button>
                   </div>
                 </div>
-
-                <div>
-                  <label className="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">
-                    Preço Gasto com Óleo/Combustível na Viagem (R$)
-                  </label>
-                  <input
-                    type="number"
-                    step="0.01"
-                    placeholder="Ex: 750.00"
-                    value={custoOleoViagem}
-                    onChange={(e) => setCustoOleoViagem(e.target.value)}
-                    className="w-full p-3 bg-slate-800 border border-slate-700 rounded-xl text-sm text-white focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-slate-500 font-semibold"
-                  />
-                </div>
               </div>
 
-              {/* Média Calculada Automaticamente */}
-              <div className="mt-4 p-4 bg-blue-950/30 border border-blue-500/30 rounded-xl flex items-center justify-between">
-                <div>
-                  <span className="text-xs text-blue-300 font-bold uppercase tracking-wider">Média Calculada pelo App:</span>
-                  <p className="text-xs text-slate-400">Baseada na quilometragem rodada e litros informados</p>
-                </div>
-                <div className="text-right">
-                  <span className="text-2xl font-extrabold text-blue-400">{mediaCalculada}</span>
+              {/* Bloco com os Cálculos Automáticos Separados */}
+              <div className="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div className="p-3 bg-blue-950/30 border border-blue-500/30 rounded-xl text-center">
+                  <span className="text-[11px] text-blue-300 font-bold uppercase tracking-wider block">Média do Veículo</span>
+                  <span className="text-xl font-extrabold text-blue-400">{dadosCalculados.mediaConsumo}</span>
                   <span className="text-xs text-slate-300 ml-1">KM/L</span>
+                </div>
+
+                <div className="p-3 bg-slate-800/80 border border-slate-700 rounded-xl text-center">
+                  <span className="text-[11px] text-slate-400 font-bold uppercase tracking-wider block">Custo Combustível/KM</span>
+                  <span className="text-xl font-extrabold text-emerald-400">R$ {dadosCalculados.custoKmCombustivel}</span>
+                  <span className="text-xs text-slate-400 ml-1">/km</span>
+                </div>
+
+                <div className="p-3 bg-slate-800/80 border border-slate-700 rounded-xl text-center">
+                  <span className="text-[11px] text-slate-400 font-bold uppercase tracking-wider block">Custo Óleo/KM</span>
+                  <span className="text-xl font-extrabold text-amber-400">R$ {dadosCalculados.custoKmOleo}</span>
+                  <span className="text-xs text-slate-400 ml-1">/km</span>
                 </div>
               </div>
             </div>
@@ -445,7 +489,7 @@ export default function ChecklistMotorista() {
               type="submit"
               className="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-4 rounded-2xl transition shadow-xl text-base flex items-center justify-center gap-2 mt-4"
             >
-              🚀 Salvar Checklist e Parada no Posto
+              🚀 Salvar Checklist e Custos
             </button>
 
           </form>
