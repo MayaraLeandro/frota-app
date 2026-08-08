@@ -8,40 +8,94 @@ interface Checklist {
   criado_em: string
   placa: string
   km: number
-  media_consumo: string
-  custo_km_combustivel: string
-  manutencao_necessaria: string
-  detalhes_manutencao: string
   observacoes: string
 }
 
 export default function PainelGestor() {
+  const [autenticado, setAutenticado] = useState(false)
+  const [senhaInput, setSenhaInput] = useState('')
   const [checklists, setChecklists] = useState<Checklist[]>([])
-  const [carregando, setCarregando] = useState(true)
+  const [carregando, setCarregando] = useState(false)
 
-  useEffect(() => {
-    async function buscarChecklists() {
-      const { data, error } = await supabase
-        .from('checklists')
-        .select('*')
-        .order('criado_em', { ascending: false })
+  // SENHA INICIAL PADRÃO (Você pode alterar depois se quiser)
+  const SENHA_MESTRE = 'admin123'
 
-      if (error) {
-        console.error('Erro ao buscar dados:', error.message)
-      } else {
-        setChecklists(data || [])
-      }
-      setCarregando(false)
+  function fazerLogin(e: React.FormEvent) {
+    e.preventDefault()
+    if (senhaInput === SENHA_MESTRE) {
+      setAutenticado(true)
+      carregarDados()
+    } else {
+      alert('Senha incorreta! A senha inicial padrão é: admin123')
     }
+  }
 
-    buscarChecklists()
-  }, [])
+  async function carregarDados() {
+    setCarregando(true)
+    const { data, error } = await supabase
+      .from('checklists')
+      .select('*')
+      .order('criado_em', { ascending: false })
 
+    if (error) {
+      console.error('Erro ao buscar dados:', error.message)
+    } else {
+      setChecklists(data || [])
+    }
+    setCarregando(false)
+  }
+
+  // TELA DE LOGIN COM O NOME NJ TRANSPORTES
+  if (!autenticado) {
+    return (
+      <main className="min-h-screen bg-slate-950 flex items-center justify-center p-4">
+        <div className="bg-slate-900 border border-slate-800 p-8 rounded-2xl w-full max-w-md shadow-2xl space-y-6">
+          <div className="text-center space-y-2">
+            <h1 className="text-2xl font-bold text-emerald-400">NJ Transportes</h1>
+            <p className="text-sm text-slate-400">Painel do Gestor - Digite a senha para acessar</p>
+          </div>
+
+          <form onSubmit={fazerLogin} className="space-y-4">
+            <div>
+              <label className="block text-xs font-semibold text-slate-400 mb-1">SENHA DE ACESSO</label>
+              <input
+                type="password"
+                value={senhaInput}
+                onChange={(e) => setSenhaInput(e.target.value)}
+                placeholder="Digite a senha (admin123)"
+                className="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-emerald-500"
+                required
+              />
+            </div>
+            <button
+              type="submit"
+              className="w-full bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold py-3 rounded-lg transition-colors"
+            >
+              Entrar no Painel
+            </button>
+          </form>
+          <p className="text-xs text-center text-slate-500">Senha inicial padrão configurada: <span className="text-emerald-400 font-mono">admin123</span></p>
+        </div>
+      </main>
+    )
+  }
+
+  // PAINEL DO GESTOR APÓS O LOGIN
   return (
     <main className="min-h-screen bg-slate-950 text-slate-100 p-6">
       <div className="max-w-6xl mx-auto">
-        <h1 className="text-3xl font-bold mb-2 text-emerald-400">Painel do Gestor</h1>
-        <p className="text-slate-400 mb-6">Acompanhe em tempo real os checklists enviados pelos motoristas.</p>
+        <div className="flex justify-between items-center mb-6">
+          <div>
+            <h1 className="text-3xl font-bold text-emerald-400">NJ Transportes - Painel do Gestor</h1>
+            <p className="text-slate-400">Acompanhe em tempo real os checklists enviados pelos motoristas.</p>
+          </div>
+          <button
+            onClick={() => setAutenticado(false)}
+            className="bg-red-500/10 border border-red-500/20 text-red-400 px-4 py-2 rounded-lg text-sm hover:bg-red-500/20 transition-colors"
+          >
+            Sair
+          </button>
+        </div>
 
         {carregando ? (
           <p className="text-slate-500">Carregando dados...</p>
@@ -59,41 +113,10 @@ export default function PainelGestor() {
                     {new Date(item.criado_em).toLocaleString('pt-BR')}
                   </span>
                 </div>
-
-                <div className="grid grid-cols-2 gap-2 text-sm">
-                  <div>
-                    <span className="text-slate-500 block text-xs">KM Atual</span>
-                    <span className="font-semibold">{item.km}</span>
-                  </div>
-                  <div>
-                    <span className="text-slate-500 block text-xs">Média de Consumo</span>
-                    <span className="font-semibold">{item.media_consumo || '-'}</span>
-                  </div>
-                  <div>
-                    <span className="text-slate-500 block text-xs">Custo por KM</span>
-                    <span className="font-semibold">{item.custo_km_combustivel || '-'}</span>
-                  </div>
-                  <div>
-                    <span className="text-slate-500 block text-xs">Manutenção Necessária?</span>
-                    <span className={`font-bold ${item.manutencao_necessaria === 'Sim' ? 'text-red-400' : 'text-emerald-400'}`}>
-                      {item.manutencao_necessaria}
-                    </span>
-                  </div>
+                <div className="text-sm space-y-1">
+                  <p><strong>KM Atual:</strong> {item.km}</p>
+                  <p><strong>Observações:</strong> {item.observacoes || 'Nenhuma'}</p>
                 </div>
-
-                {item.manutencao_necessaria === 'Sim' && item.detalhes_manutencao && (
-                  <div className="bg-red-950/30 border border-red-500/20 p-3 rounded-lg text-sm">
-                    <span className="text-red-400 block text-xs font-bold mb-1">Detalhes da Manutenção:</span>
-                    <p className="text-red-200">{item.detalhes_manutencao}</p>
-                  </div>
-                )}
-
-                {item.observacoes && (
-                  <div className="bg-slate-950 p-3 rounded-lg text-sm border border-slate-800/60">
-                    <span className="text-slate-500 block text-xs mb-1">Observações:</span>
-                    <p className="text-slate-300">{item.observacoes}</p>
-                  </div>
-                )}
               </div>
             ))}
           </div>
