@@ -116,7 +116,7 @@ export default function ChecklistMotorista() {
             </div>
             <div>
               <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-wide">
-                NJ <span className="text-blue-400 font-light text-xl">TRANSPORTES</span>
+                NJ TRANSPORTES
               </h1>
               <p className="text-xs text-slate-400 tracking-wider uppercase font-medium mt-0.5">
                 Painel Inteligente de Checklist e Frota
