@@ -26,6 +26,7 @@ export default function ChecklistMotorista() {
   const [precoTotalCombustivel, setPrecoTotalCombustivel] = useState("");
   const [precoTotalOleo, setPrecoTotalOleo] = useState("");
   const [localizacaoPosto, setLocalizacaoPosto] = useState("");
+  const [coordsGPS, setCoordsGPS] = useState<{ lat: number; lon: number } | null>(null);
   const [buscandoLocal, setBuscandoLocal] = useState(false);
 
   const [manutencaoNecessaria, setManutencaoNecessaria] = useState("nao");
@@ -52,13 +53,8 @@ export default function ChecklistMotorista() {
       kmRodados = kmAtu - kmAnt;
     }
 
-    // Média de consumo (KM/L)
     const mediaConsumo = (kmRodados > 0 && litros > 0) ? (kmRodados / litros).toFixed(2) : "0.00";
-
-    // Custo por KM rodado de Combustível (R$/KM)
     const custoKmCombustivel = (kmRodados > 0 && custoComb > 0) ? (custoComb / kmRodados).toFixed(2) : "0.00";
-
-    // Custo por KM rodado de Óleo (R$/KM)
     const custoKmOleo = (kmRodados > 0 && custoOleo > 0) ? (custoOleo / kmRodados).toFixed(2) : "0.00";
 
     return { kmRodados, mediaConsumo, custoKmCombustivel, custoKmOleo };
@@ -76,6 +72,7 @@ export default function ChecklistMotorista() {
       (position) => {
         const lat = position.coords.latitude;
         const lon = position.coords.longitude;
+        setCoordsGPS({ lat, lon });
         setLocalizacaoPosto(`Lat: ${lat.toFixed(4)}, Lon: ${lon.toFixed(4)}`);
         setBuscandoLocal(false);
       },
@@ -293,10 +290,10 @@ export default function ChecklistMotorista() {
               </div>
             </div>
 
-            {/* CARD: Parada no Posto, Abastecimento e Custos Separados */}
+            {/* CARD: Parada no Posto, Abastecimento, Custos e Mapa em Tempo Real */}
             <div className="bg-slate-900/50 p-5 rounded-2xl border border-slate-800/80 space-y-4">
               <h2 className="font-bold text-sm uppercase tracking-wider text-blue-400 mb-3 flex items-center gap-2">
-                ⛽ Parada no Posto e Controle de Custos
+                ⛽ Parada no Posto e Mapa em Tempo Real
               </h2>
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -368,13 +365,13 @@ export default function ChecklistMotorista() {
                 </div>
                 <div>
                   <label className="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">
-                    Localização (Maps / GPS)
+                    Localização (GPS)
                   </label>
                   <div className="flex gap-2">
                     <input
                       type="text"
                       readOnly
-                      placeholder="Obter GPS"
+                      placeholder="Clique no botão"
                       value={localizacaoPosto}
                       className="w-full p-3 bg-slate-800 border border-slate-700 rounded-xl text-xs text-slate-300 focus:outline-none"
                     />
@@ -388,6 +385,26 @@ export default function ChecklistMotorista() {
                   </div>
                 </div>
               </div>
+
+              {/* MAPA INTERATIVO EM TEMPO REAL */}
+              {coordsGPS && (
+                <div className="mt-3 overflow-hidden rounded-2xl border border-slate-700 shadow-lg">
+                  <div className="bg-slate-800 px-3 py-2 text-xs font-semibold text-slate-300 flex justify-between items-center">
+                    <span>🗺️ Visualização do Posto em Tempo Real</span>
+                    <span className="text-[10px] text-emerald-400 font-mono">GPS Ativo ✓</span>
+                  </div>
+                  <div className="w-full h-64 bg-slate-950">
+                    <iframe
+                      title="Mapa do Posto"
+                      width="100%"
+                      height="100%"
+                      style={{ border: 0 }}
+                      loading="lazy"
+                      src={`https://www.openstreetmap.org/export/embed.html?bbox=${coordsGPS.lon - 0.005}%2C${coordsGPS.lat - 0.005}%2C${coordsGPS.lon + 0.005}%2C${coordsGPS.lat + 0.005}&layer=mapnik&marker=${coordsGPS.lat}%2C${coordsGPS.lon}`}
+                    ></iframe>
+                  </div>
+                </div>
+              )}
 
               {/* Bloco com os Cálculos Automáticos Separados */}
               <div className="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-3">
