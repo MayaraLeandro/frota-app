@@ -13,7 +13,6 @@ export default function ChecklistMotorista() {
   const [paraBrisasOk, setParaBrisasOk] = useState(true);
   const [funilariaOk, setFunilariaOk] = useState(true);
 
-  // Estados para armazenar as fotos de cada item
   const [fotoPneus, setFotoPneus] = useState<string | null>(null);
   const [fotoOleo, setFotoOleo] = useState<string | null>(null);
   const [fotoBau, setFotoBau] = useState<string | null>(null);
@@ -31,7 +30,6 @@ export default function ChecklistMotorista() {
   const [enviado, setEnviado] = useState(false);
   const [mostrarQrCode, setMostrarQrCode] = useState(false);
 
-  // Função auxiliar para capturar a imagem e converter em preview
   const handleFotoChange = (e: React.ChangeEvent<HTMLInputElement>, setFoto: (val: string | null) => void) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -54,7 +52,6 @@ export default function ChecklistMotorista() {
     <main className="min-h-screen bg-[#0b0f19] p-4 sm:p-8 text-slate-100 flex items-center justify-center font-sans">
       <div className="max-w-4xl w-full bg-[#131b2e] rounded-3xl shadow-2xl p-6 sm:p-10 border border-slate-800">
         
-        {/* Topo / Cabeçalho */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 pb-6 border-b border-slate-800">
           <div>
             <h1 className="text-2xl sm:text-3xl font-extrabold text-white flex items-center gap-3">
@@ -100,7 +97,6 @@ export default function ChecklistMotorista() {
         ) : (
           <form onSubmit={handleSubmit} className="space-y-6">
             
-            {/* Seção Veículo (Placa e KM) */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-slate-900/50 p-5 rounded-2xl border border-slate-800/80">
               <div>
                 <label className="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">
@@ -130,7 +126,7 @@ export default function ChecklistMotorista() {
               </div>
             </div>
 
-            {/* Cards de Inspeção com Câmera */}
+            {/* Itens de Inspeção com Câmera */}
             <div className="bg-slate-900/50 p-5 rounded-2xl border border-slate-800/80 space-y-4">
               <h2 className="font-bold text-sm uppercase tracking-wider text-slate-400 mb-3">
                 Itens de Inspeção Diária e Auditoria por Foto:
@@ -138,9 +134,8 @@ export default function ChecklistMotorista() {
 
               <div className="grid grid-cols-1 gap-3">
                 
-                {/* Nível de Óleo */}
                 <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-3.5 bg-slate-800/60 rounded-xl border border-slate-700/60 gap-3">
-                  <div className="flex items-center gap-3 w-full sm:w-auto">
+                  <div className="flex items-center gap-3">
                     <input
                       type="checkbox"
                       checked={nivelOleoOk}
@@ -149,18 +144,17 @@ export default function ChecklistMotorista() {
                     />
                     <span className="text-sm text-slate-200 font-medium">🛢️ Nível de Óleo OK</span>
                   </div>
-                  <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
+                  <div className="flex items-center gap-2">
                     {fotoOleo && <span className="text-xs text-emerald-400 font-semibold">✓ Foto Anexada</span>}
-                    <label className="cursor-pointer bg-slate-700 hover:bg-slate-600 text-white text-xs px-3 py-2 rounded-lg flex items-center gap-1.5 transition border border-slate-600">
+                    <label className="cursor-pointer bg-blue-600 hover:bg-blue-500 text-white text-xs px-3.5 py-2 rounded-lg flex items-center gap-1.5 transition font-semibold shadow">
                       📷 {fotoOleo ? "Trocar Foto" : "Tirar Foto"}
                       <input type="file" accept="image/*" capture="environment" className="hidden" onChange={(e) => handleFotoChange(e, setFotoOleo)} />
                     </label>
                   </div>
                 </div>
 
-                {/* Pneus */}
                 <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-3.5 bg-slate-800/60 rounded-xl border border-slate-700/60 gap-3">
-                  <div className="flex items-center gap-3 w-full sm:w-auto">
+                  <div className="flex items-center gap-3">
                     <input
                       type="checkbox"
                       checked={pneusOk}
@@ -169,18 +163,17 @@ export default function ChecklistMotorista() {
                     />
                     <span className="text-sm text-slate-200 font-medium">🚗 Pneus (Calibragem)</span>
                   </div>
-                  <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
+                  <div className="flex items-center gap-2">
                     {fotoPneus && <span className="text-xs text-emerald-400 font-semibold">✓ Foto Anexada</span>}
-                    <label className="cursor-pointer bg-slate-700 hover:bg-slate-600 text-white text-xs px-3 py-2 rounded-lg flex items-center gap-1.5 transition border border-slate-600">
+                    <label className="cursor-pointer bg-blue-600 hover:bg-blue-500 text-white text-xs px-3.5 py-2 rounded-lg flex items-center gap-1.5 transition font-semibold shadow">
                       📷 {fotoPneus ? "Trocar Foto" : "Tirar Foto"}
                       <input type="file" accept="image/*" capture="environment" className="hidden" onChange={(e) => handleFotoChange(e, setFotoPneus)} />
                     </label>
                   </div>
                 </div>
 
-                {/* Infiltração no Baú */}
                 <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-3.5 bg-slate-800/60 rounded-xl border border-slate-700/60 gap-3">
-                  <div className="flex items-center gap-3 w-full sm:w-auto">
+                  <div className="flex items-center gap-3">
                     <input
                       type="checkbox"
                       checked={infiltracaoBauOk}
@@ -189,18 +182,17 @@ export default function ChecklistMotorista() {
                     />
                     <span className="text-sm text-slate-200 font-medium">📦 Infiltração no Baú</span>
                   </div>
-                  <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
+                  <div className="flex items-center gap-2">
                     {fotoBau && <span className="text-xs text-emerald-400 font-semibold">✓ Foto Anexada</span>}
-                    <label className="cursor-pointer bg-slate-700 hover:bg-slate-600 text-white text-xs px-3 py-2 rounded-lg flex items-center gap-1.5 transition border border-slate-600">
+                    <label className="cursor-pointer bg-blue-600 hover:bg-blue-500 text-white text-xs px-3.5 py-2 rounded-lg flex items-center gap-1.5 transition font-semibold shadow">
                       📷 {fotoBau ? "Trocar Foto" : "Tirar Foto"}
                       <input type="file" accept="image/*" capture="environment" className="hidden" onChange={(e) => handleFotoChange(e, setFotoBau)} />
                     </label>
                   </div>
                 </div>
 
-                {/* Para-brisas */}
                 <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-3.5 bg-slate-800/60 rounded-xl border border-slate-700/60 gap-3">
-                  <div className="flex items-center gap-3 w-full sm:w-auto">
+                  <div className="flex items-center gap-3">
                     <input
                       type="checkbox"
                       checked={paraBrisasOk}
@@ -209,18 +201,17 @@ export default function ChecklistMotorista() {
                     />
                     <span className="text-sm text-slate-200 font-medium">🪟 Para-brisas</span>
                   </div>
-                  <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
+                  <div className="flex items-center gap-2">
                     {fotoParaBrisas && <span className="text-xs text-emerald-400 font-semibold">✓ Foto Anexada</span>}
-                    <label className="cursor-pointer bg-slate-700 hover:bg-slate-600 text-white text-xs px-3 py-2 rounded-lg flex items-center gap-1.5 transition border border-slate-600">
+                    <label className="cursor-pointer bg-blue-600 hover:bg-blue-500 text-white text-xs px-3.5 py-2 rounded-lg flex items-center gap-1.5 transition font-semibold shadow">
                       📷 {fotoParaBrisas ? "Trocar Foto" : "Tirar Foto"}
                       <input type="file" accept="image/*" capture="environment" className="hidden" onChange={(e) => handleFotoChange(e, setFotoParaBrisas)} />
                     </label>
                   </div>
                 </div>
 
-                {/* Sem Avarias / Amassados */}
                 <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-3.5 bg-slate-800/60 rounded-xl border border-slate-700/60 gap-3">
-                  <div className="flex items-center gap-3 w-full sm:w-auto">
+                  <div className="flex items-center gap-3">
                     <input
                       type="checkbox"
                       checked={funilariaOk}
@@ -229,9 +220,9 @@ export default function ChecklistMotorista() {
                     />
                     <span className="text-sm text-slate-200 font-medium">🛡️ Sem Avarias / Amassados</span>
                   </div>
-                  <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
+                  <div className="flex items-center gap-2">
                     {fotoFunilaria && <span className="text-xs text-emerald-400 font-semibold">✓ Foto Anexada</span>}
-                    <label className="cursor-pointer bg-slate-700 hover:bg-slate-600 text-white text-xs px-3 py-2 rounded-lg flex items-center gap-1.5 transition border border-slate-600">
+                    <label className="cursor-pointer bg-blue-600 hover:bg-blue-500 text-white text-xs px-3.5 py-2 rounded-lg flex items-center gap-1.5 transition font-semibold shadow">
                       📷 {fotoFunilaria ? "Trocar Foto" : "Tirar Foto"}
                       <input type="file" accept="image/*" capture="environment" className="hidden" onChange={(e) => handleFotoChange(e, setFotoFunilaria)} />
                     </label>
@@ -241,7 +232,6 @@ export default function ChecklistMotorista() {
               </div>
             </div>
 
-            {/* Manutenção a Fazer */}
             <div className="bg-slate-900/50 p-5 rounded-2xl border border-slate-800/80">
               <label className="block font-bold text-sm uppercase tracking-wider text-slate-400 mb-2">
                 Manutenção a Fazer?
@@ -267,7 +257,6 @@ export default function ChecklistMotorista() {
               )}
             </div>
 
-            {/* Última Troca de Óleo */}
             <div className="bg-slate-900/50 p-5 rounded-2xl border border-slate-800/80">
               <h2 className="font-bold text-sm uppercase tracking-wider text-slate-400 mb-3">
                 ⏱️ Registro da Última Troca de Óleo:
@@ -304,7 +293,6 @@ export default function ChecklistMotorista() {
               </div>
             </div>
 
-            {/* Observações Gerais */}
             <div className="bg-slate-900/50 p-5 rounded-2xl border border-slate-800/80">
               <label className="block font-bold text-sm uppercase tracking-wider text-slate-400 mb-2">
                 Observações Gerais
@@ -318,7 +306,6 @@ export default function ChecklistMotorista() {
               />
             </div>
 
-            {/* Botão de Envio */}
             <button
               type="submit"
               className="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-4 rounded-2xl transition shadow-xl text-base flex items-center justify-center gap-2 mt-4"
