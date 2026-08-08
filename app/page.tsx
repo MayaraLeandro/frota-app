@@ -19,6 +19,7 @@ export default function ChecklistMotorista() {
   const [fotoParaBrisas, setFotoParaBrisas] = useState<string | null>(null);
   const [fotoFunilaria, setFotoFunilaria] = useState<string | null>(null);
 
+  // Estados Separados do Posto / Abastecimento e Custos
   const [kmAnteriorAbast, setKmAnteriorAbast] = useState("");
   const [kmAbastecimento, setKmAbastecimento] = useState("");
   const [litrosAbastecidos, setLitrosAbastecidos] = useState("");
@@ -39,6 +40,7 @@ export default function ChecklistMotorista() {
   const [enviado, setEnviado] = useState(false);
   const [mostrarQrCode, setMostrarQrCode] = useState(false);
 
+  // Cálculos Automáticos
   const calcularDadosPosto = () => {
     const kmAnt = parseFloat(kmAnteriorAbast);
     const kmAtu = parseFloat(kmAbastecimento);
@@ -103,30 +105,20 @@ export default function ChecklistMotorista() {
     <main className="min-h-screen bg-[#070b14] p-4 sm:p-8 text-slate-100 flex items-center justify-center font-sans">
       <div className="max-w-4xl w-full bg-[#0e1626] rounded-3xl shadow-2xl p-6 sm:p-10 border border-[#1b2a4a]">
         
-        {/* CABEÇALHO COM MARCA D'ÁGUA NJ */}
+        {/* CABEÇALHO COM IDENTIDADE DA LOGO NJ TRANSPORTES */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 pb-6 border-b border-[#1b2a4a]">
           <div className="flex items-center gap-4">
-            
-            {/* Marca d'água NJ Estilizada */}
-            <div className="relative bg-gradient-to-br from-blue-600/20 to-blue-900/40 p-3 rounded-2xl border border-blue-500/30 flex items-center justify-center w-20 h-20 shadow-inner overflow-hidden shrink-0">
-              <span className="absolute text-4xl font-black text-blue-500/10 select-none tracking-tighter">
+            {/* Logo estilizada NJ baseada na marca do cliente */}
+            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#102a5c] to-[#07132b] border border-[#23427f] flex items-center justify-center shadow-lg shadow-blue-950/50">
+              <span className="text-2xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-200" style={{ fontFamily: 'serif' }}>
                 NJ
               </span>
-              <div className="flex flex-col items-center justify-center z-10">
-                <span className="text-xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-200">
-                  NJ
-                </span>
-                <span className="text-[9px] font-bold tracking-widest text-blue-400/80 uppercase">
-                  Frota
-                </span>
-              </div>
             </div>
-
             <div>
-              <h1 className="text-xl sm:text-2xl font-extrabold text-white tracking-wide">
-                NJ TRANSPORTES
+              <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-wide">
+                NJ <span className="text-blue-400 font-light text-xl">TRANSPORTES</span>
               </h1>
-              <p className="text-xs text-blue-400 tracking-wider uppercase font-medium mt-0.5">
+              <p className="text-xs text-slate-400 tracking-wider uppercase font-medium mt-0.5">
                 Painel Inteligente de Checklist e Frota
               </p>
             </div>
@@ -196,7 +188,7 @@ export default function ChecklistMotorista() {
               </div>
             </div>
 
-            {/* Itens de Inspeção */}
+            {/* Itens de Inspeção com Câmera Discreta */}
             <div className="bg-[#090f1a]/60 p-5 rounded-2xl border border-[#1b2a4a]/70 space-y-4">
               <h2 className="font-bold text-sm uppercase tracking-wider text-slate-400 mb-3">
                 Itens de Inspeção Diária:
@@ -307,7 +299,7 @@ export default function ChecklistMotorista() {
               </div>
             </div>
 
-            {/* Parada no Posto e Custos */}
+            {/* CARD: Parada no Posto, Abastecimento, Custos e Mapa em Tempo Real */}
             <div className="bg-[#090f1a]/60 p-5 rounded-2xl border border-[#1b2a4a]/70 space-y-4">
               <h2 className="font-bold text-sm uppercase tracking-wider text-blue-400 mb-3 flex items-center gap-2">
                 ⛽ Parada no Posto e Mapa em Tempo Real
@@ -403,6 +395,7 @@ export default function ChecklistMotorista() {
                 </div>
               </div>
 
+              {/* MAPA INTERATIVO EM TEMPO REAL */}
               {coordsGPS && (
                 <div className="mt-3 overflow-hidden rounded-2xl border border-[#23375c] shadow-lg">
                   <div className="bg-[#131d31] px-3 py-2 text-xs font-semibold text-slate-300 flex justify-between items-center">
@@ -422,6 +415,7 @@ export default function ChecklistMotorista() {
                 </div>
               )}
 
+              {/* Bloco com os Cálculos Automáticos Separados */}
               <div className="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <div className="p-3 bg-[#0c182c] border border-blue-900/40 rounded-xl text-center">
                   <span className="text-[11px] text-blue-300 font-bold uppercase tracking-wider block">Média do Veículo</span>
