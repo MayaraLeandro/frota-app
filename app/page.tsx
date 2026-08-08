@@ -18,8 +18,8 @@ export default function ChecklistMotorista() {
     setEnviado(true);
   };
 
-  // Link que o QR Code vai abrir (no caso, a própria tela de checklist)
-  const urlChecklist = "http://localhost:3000";
+  // Link corrigido para o seu site oficial na Vercel
+  const urlChecklist = "https://frota-app-ruddy.vercel.app";
 
   return (
     <main className="min-h-screen bg-gray-100 p-4 sm:p-8 text-gray-800">
