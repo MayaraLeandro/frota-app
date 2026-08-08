@@ -126,15 +126,16 @@ export default function ChecklistMotorista() {
               </div>
             </div>
 
-            {/* Itens de Inspeção com Câmera */}
+            {/* Itens de Inspeção com Câmera Direta Estilo Marca d'Água */}
             <div className="bg-slate-900/50 p-5 rounded-2xl border border-slate-800/80 space-y-4">
               <h2 className="font-bold text-sm uppercase tracking-wider text-slate-400 mb-3">
-                Itens de Inspeção Diária e Auditoria por Foto:
+                Itens de Inspeção Diária:
               </h2>
 
               <div className="grid grid-cols-1 gap-3">
                 
-                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-3.5 bg-slate-800/60 rounded-xl border border-slate-700/60 gap-3">
+                {/* Nível de Óleo */}
+                <div className="flex items-center justify-between p-3.5 bg-slate-800/60 rounded-xl border border-slate-700/60">
                   <div className="flex items-center gap-3">
                     <input
                       type="checkbox"
@@ -145,15 +146,16 @@ export default function ChecklistMotorista() {
                     <span className="text-sm text-slate-200 font-medium">🛢️ Nível de Óleo OK</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    {fotoOleo && <span className="text-xs text-emerald-400 font-semibold">✓ Foto Anexada</span>}
-                    <label className="cursor-pointer bg-blue-600 hover:bg-blue-500 text-white text-xs px-3.5 py-2 rounded-lg flex items-center gap-1.5 transition font-semibold shadow">
-                      📷 {fotoOleo ? "Trocar Foto" : "Tirar Foto"}
+                    {fotoOleo && <span className="text-[11px] text-emerald-400 font-medium">Capturado ✓</span>}
+                    <label className="cursor-pointer p-2 rounded-lg hover:bg-slate-700/80 transition text-slate-400 hover:text-white" title="Tirar foto na hora">
+                      <span className="text-lg">📷</span>
                       <input type="file" accept="image/*" capture="environment" className="hidden" onChange={(e) => handleFotoChange(e, setFotoOleo)} />
                     </label>
                   </div>
                 </div>
 
-                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-3.5 bg-slate-800/60 rounded-xl border border-slate-700/60 gap-3">
+                {/* Pneus */}
+                <div className="flex items-center justify-between p-3.5 bg-slate-800/60 rounded-xl border border-slate-700/60">
                   <div className="flex items-center gap-3">
                     <input
                       type="checkbox"
@@ -164,15 +166,16 @@ export default function ChecklistMotorista() {
                     <span className="text-sm text-slate-200 font-medium">🚗 Pneus (Calibragem)</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    {fotoPneus && <span className="text-xs text-emerald-400 font-semibold">✓ Foto Anexada</span>}
-                    <label className="cursor-pointer bg-blue-600 hover:bg-blue-500 text-white text-xs px-3.5 py-2 rounded-lg flex items-center gap-1.5 transition font-semibold shadow">
-                      📷 {fotoPneus ? "Trocar Foto" : "Tirar Foto"}
+                    {fotoPneus && <span className="text-[11px] text-emerald-400 font-medium">Capturado ✓</span>}
+                    <label className="cursor-pointer p-2 rounded-lg hover:bg-slate-700/80 transition text-slate-400 hover:text-white" title="Tirar foto na hora">
+                      <span className="text-lg">📷</span>
                       <input type="file" accept="image/*" capture="environment" className="hidden" onChange={(e) => handleFotoChange(e, setFotoPneus)} />
                     </label>
                   </div>
                 </div>
 
-                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-3.5 bg-slate-800/60 rounded-xl border border-slate-700/60 gap-3">
+                {/* Infiltração no Baú */}
+                <div className="flex items-center justify-between p-3.5 bg-slate-800/60 rounded-xl border border-slate-700/60">
                   <div className="flex items-center gap-3">
                     <input
                       type="checkbox"
@@ -183,15 +186,16 @@ export default function ChecklistMotorista() {
                     <span className="text-sm text-slate-200 font-medium">📦 Infiltração no Baú</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    {fotoBau && <span className="text-xs text-emerald-400 font-semibold">✓ Foto Anexada</span>}
-                    <label className="cursor-pointer bg-blue-600 hover:bg-blue-500 text-white text-xs px-3.5 py-2 rounded-lg flex items-center gap-1.5 transition font-semibold shadow">
-                      📷 {fotoBau ? "Trocar Foto" : "Tirar Foto"}
+                    {fotoBau && <span className="text-[11px] text-emerald-400 font-medium">Capturado ✓</span>}
+                    <label className="cursor-pointer p-2 rounded-lg hover:bg-slate-700/80 transition text-slate-400 hover:text-white" title="Tirar foto na hora">
+                      <span className="text-lg">📷</span>
                       <input type="file" accept="image/*" capture="environment" className="hidden" onChange={(e) => handleFotoChange(e, setFotoBau)} />
                     </label>
                   </div>
                 </div>
 
-                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-3.5 bg-slate-800/60 rounded-xl border border-slate-700/60 gap-3">
+                {/* Para-brisas */}
+                <div className="flex items-center justify-between p-3.5 bg-slate-800/60 rounded-xl border border-slate-700/60">
                   <div className="flex items-center gap-3">
                     <input
                       type="checkbox"
@@ -202,15 +206,16 @@ export default function ChecklistMotorista() {
                     <span className="text-sm text-slate-200 font-medium">🪟 Para-brisas</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    {fotoParaBrisas && <span className="text-xs text-emerald-400 font-semibold">✓ Foto Anexada</span>}
-                    <label className="cursor-pointer bg-blue-600 hover:bg-blue-500 text-white text-xs px-3.5 py-2 rounded-lg flex items-center gap-1.5 transition font-semibold shadow">
-                      📷 {fotoParaBrisas ? "Trocar Foto" : "Tirar Foto"}
+                    {fotoParaBrisas && <span className="text-[11px] text-emerald-400 font-medium">Capturado ✓</span>}
+                    <label className="cursor-pointer p-2 rounded-lg hover:bg-slate-700/80 transition text-slate-400 hover:text-white" title="Tirar foto na hora">
+                      <span className="text-lg">📷</span>
                       <input type="file" accept="image/*" capture="environment" className="hidden" onChange={(e) => handleFotoChange(e, setFotoParaBrisas)} />
                     </label>
                   </div>
                 </div>
 
-                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-3.5 bg-slate-800/60 rounded-xl border border-slate-700/60 gap-3">
+                {/* Sem Avarias / Amassados */}
+                <div className="flex items-center justify-between p-3.5 bg-slate-800/60 rounded-xl border border-slate-700/60">
                   <div className="flex items-center gap-3">
                     <input
                       type="checkbox"
@@ -221,9 +226,9 @@ export default function ChecklistMotorista() {
                     <span className="text-sm text-slate-200 font-medium">🛡️ Sem Avarias / Amassados</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    {fotoFunilaria && <span className="text-xs text-emerald-400 font-semibold">✓ Foto Anexada</span>}
-                    <label className="cursor-pointer bg-blue-600 hover:bg-blue-500 text-white text-xs px-3.5 py-2 rounded-lg flex items-center gap-1.5 transition font-semibold shadow">
-                      📷 {fotoFunilaria ? "Trocar Foto" : "Tirar Foto"}
+                    {fotoFunilaria && <span className="text-[11px] text-emerald-400 font-medium">Capturado ✓</span>}
+                    <label className="cursor-pointer p-2 rounded-lg hover:bg-slate-700/80 transition text-slate-400 hover:text-white" title="Tirar foto na hora">
+                      <span className="text-lg">📷</span>
                       <input type="file" accept="image/*" capture="environment" className="hidden" onChange={(e) => handleFotoChange(e, setFotoFunilaria)} />
                     </label>
                   </div>
@@ -310,7 +315,7 @@ export default function ChecklistMotorista() {
               type="submit"
               className="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-4 rounded-2xl transition shadow-xl text-base flex items-center justify-center gap-2 mt-4"
             >
-              🚀 Salvar Checklist com Fotos
+              🚀 Salvar Checklist
             </button>
 
           </form>
