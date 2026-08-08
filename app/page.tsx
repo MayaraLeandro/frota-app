@@ -102,30 +102,39 @@ export default function ChecklistMotorista() {
   const urlChecklist = "https://frota-app-ruddy.vercel.app";
 
   return (
-    <main className="min-h-screen bg-[#0b0f19] p-4 sm:p-8 text-slate-100 flex items-center justify-center font-sans">
-      <div className="max-w-4xl w-full bg-[#131b2e] rounded-3xl shadow-2xl p-6 sm:p-10 border border-slate-800">
+    <main className="min-h-screen bg-[#070b14] p-4 sm:p-8 text-slate-100 flex items-center justify-center font-sans">
+      <div className="max-w-4xl w-full bg-[#0e1626] rounded-3xl shadow-2xl p-6 sm:p-10 border border-[#1b2a4a]">
         
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 pb-6 border-b border-slate-800">
-          <div>
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-white flex items-center gap-3">
-              <span className="text-blue-500 bg-blue-500/10 p-2 rounded-xl">🚛</span> Controle de Frota
-            </h1>
-            <p className="text-sm text-slate-400 mt-1">
-              Painel Inteligente de Checklist Diário e Paradas
-            </p>
+        {/* CABEÇALHO COM IDENTIDADE DA LOGO NJ TRANSPORTES */}
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 pb-6 border-b border-[#1b2a4a]">
+          <div className="flex items-center gap-4">
+            {/* Logo estilizada NJ baseada na marca do cliente */}
+            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#102a5c] to-[#07132b] border border-[#23427f] flex items-center justify-center shadow-lg shadow-blue-950/50">
+              <span className="text-2xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-200" style={{ fontFamily: 'serif' }}>
+                NJ
+              </span>
+            </div>
+            <div>
+              <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-wide">
+                NJ <span className="text-blue-400 font-light text-xl">TRANSPORTES</span>
+              </h1>
+              <p className="text-xs text-slate-400 tracking-wider uppercase font-medium mt-0.5">
+                Painel Inteligente de Checklist e Frota
+              </p>
+            </div>
           </div>
           
           <button
             type="button"
             onClick={() => setMostrarQrCode(!mostrarQrCode)}
-            className="mt-4 sm:mt-0 text-xs bg-slate-800 hover:bg-slate-700 text-slate-300 px-4 py-2.5 rounded-xl font-semibold transition border border-slate-700"
+            className="mt-4 sm:mt-0 text-xs bg-[#162238] hover:bg-[#1e2f4f] text-slate-300 px-4 py-2.5 rounded-xl font-semibold transition border border-[#263c66]"
           >
             {mostrarQrCode ? "✕ Fechar QR Code" : "📱 Ver QR Code"}
           </button>
         </div>
 
         {mostrarQrCode && (
-          <div className="mb-8 p-6 bg-slate-900/90 rounded-2xl border border-slate-700 flex flex-col items-center">
+          <div className="mb-8 p-6 bg-[#090f1a] rounded-2xl border border-[#1b2a4a] flex flex-col items-center">
             <p className="text-xs text-slate-300 mb-3 font-semibold">
               Escaneie para abrir o checklist no celular:
             </p>
@@ -142,7 +151,7 @@ export default function ChecklistMotorista() {
             <p className="text-sm text-emerald-400/80 mb-6">Os dados de custos e abastecimento foram computados.</p>
             <button
               onClick={() => setEnviado(false)}
-              className="bg-emerald-600 hover:bg-emerald-500 text-white px-6 py-3 rounded-xl font-semibold text-sm transition shadow-lg"
+              className="bg-blue-600 hover:bg-blue-500 text-white px-6 py-3 rounded-xl font-semibold text-sm transition shadow-lg"
             >
               Fazer Novo Registro
             </button>
@@ -150,7 +159,7 @@ export default function ChecklistMotorista() {
         ) : (
           <form onSubmit={handleSubmit} className="space-y-6">
             
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-slate-900/50 p-5 rounded-2xl border border-slate-800/80">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-[#090f1a]/60 p-5 rounded-2xl border border-[#1b2a4a]/70">
               <div>
                 <label className="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">
                   Placa do Veículo
@@ -161,7 +170,7 @@ export default function ChecklistMotorista() {
                   placeholder="ABC-1234"
                   value={placa}
                   onChange={(e) => setPlaca(e.target.value.toUpperCase())}
-                  className="w-full p-3 bg-slate-800 border border-slate-700 rounded-xl text-sm text-white focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-slate-500 font-semibold"
+                  className="w-full p-3 bg-[#131d31] border border-[#23375c] rounded-xl text-sm text-white focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-slate-500 font-semibold"
                 />
               </div>
               <div>
@@ -174,13 +183,13 @@ export default function ChecklistMotorista() {
                   placeholder="Ex: 150000"
                   value={km}
                   onChange={(e) => setKm(e.target.value)}
-                  className="w-full p-3 bg-slate-800 border border-slate-700 rounded-xl text-sm text-white focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-slate-500 font-semibold"
+                  className="w-full p-3 bg-[#131d31] border border-[#23375c] rounded-xl text-sm text-white focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-slate-500 font-semibold"
                 />
               </div>
             </div>
 
             {/* Itens de Inspeção com Câmera Discreta */}
-            <div className="bg-slate-900/50 p-5 rounded-2xl border border-slate-800/80 space-y-4">
+            <div className="bg-[#090f1a]/60 p-5 rounded-2xl border border-[#1b2a4a]/70 space-y-4">
               <h2 className="font-bold text-sm uppercase tracking-wider text-slate-400 mb-3">
                 Itens de Inspeção Diária:
               </h2>
@@ -188,7 +197,7 @@ export default function ChecklistMotorista() {
               <div className="grid grid-cols-1 gap-3">
                 
                 {/* Nível de Óleo */}
-                <div className="flex items-center justify-between p-3.5 bg-slate-800/60 rounded-xl border border-slate-700/60">
+                <div className="flex items-center justify-between p-3.5 bg-[#131d31]/70 rounded-xl border border-[#23375c]/60">
                   <div className="flex items-center gap-3">
                     <input
                       type="checkbox"
@@ -208,7 +217,7 @@ export default function ChecklistMotorista() {
                 </div>
 
                 {/* Pneus */}
-                <div className="flex items-center justify-between p-3.5 bg-slate-800/60 rounded-xl border border-slate-700/60">
+                <div className="flex items-center justify-between p-3.5 bg-[#131d31]/70 rounded-xl border border-[#23375c]/60">
                   <div className="flex items-center gap-3">
                     <input
                       type="checkbox"
@@ -228,7 +237,7 @@ export default function ChecklistMotorista() {
                 </div>
 
                 {/* Infiltração no Baú */}
-                <div className="flex items-center justify-between p-3.5 bg-slate-800/60 rounded-xl border border-slate-700/60">
+                <div className="flex items-center justify-between p-3.5 bg-[#131d31]/70 rounded-xl border border-[#23375c]/60">
                   <div className="flex items-center gap-3">
                     <input
                       type="checkbox"
@@ -248,7 +257,7 @@ export default function ChecklistMotorista() {
                 </div>
 
                 {/* Para-brisas */}
-                <div className="flex items-center justify-between p-3.5 bg-slate-800/60 rounded-xl border border-slate-700/60">
+                <div className="flex items-center justify-between p-3.5 bg-[#131d31]/70 rounded-xl border border-[#23375c]/60">
                   <div className="flex items-center gap-3">
                     <input
                       type="checkbox"
@@ -268,7 +277,7 @@ export default function ChecklistMotorista() {
                 </div>
 
                 {/* Sem Avarias / Amassados */}
-                <div className="flex items-center justify-between p-3.5 bg-slate-800/60 rounded-xl border border-slate-700/60">
+                <div className="flex items-center justify-between p-3.5 bg-[#131d31]/70 rounded-xl border border-[#23375c]/60">
                   <div className="flex items-center gap-3">
                     <input
                       type="checkbox"
@@ -291,7 +300,7 @@ export default function ChecklistMotorista() {
             </div>
 
             {/* CARD: Parada no Posto, Abastecimento, Custos e Mapa em Tempo Real */}
-            <div className="bg-slate-900/50 p-5 rounded-2xl border border-slate-800/80 space-y-4">
+            <div className="bg-[#090f1a]/60 p-5 rounded-2xl border border-[#1b2a4a]/70 space-y-4">
               <h2 className="font-bold text-sm uppercase tracking-wider text-blue-400 mb-3 flex items-center gap-2">
                 ⛽ Parada no Posto e Mapa em Tempo Real
               </h2>
@@ -306,7 +315,7 @@ export default function ChecklistMotorista() {
                     placeholder="Ex: 149000"
                     value={kmAnteriorAbast}
                     onChange={(e) => setKmAnteriorAbast(e.target.value)}
-                    className="w-full p-3 bg-slate-800 border border-slate-700 rounded-xl text-sm text-white focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-slate-500 font-semibold"
+                    className="w-full p-3 bg-[#131d31] border border-[#23375c] rounded-xl text-sm text-white focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-slate-500 font-semibold"
                   />
                 </div>
                 <div>
@@ -318,7 +327,7 @@ export default function ChecklistMotorista() {
                     placeholder="Ex: 149500"
                     value={kmAbastecimento}
                     onChange={(e) => setKmAbastecimento(e.target.value)}
-                    className="w-full p-3 bg-slate-800 border border-slate-700 rounded-xl text-sm text-white focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-slate-500 font-semibold"
+                    className="w-full p-3 bg-[#131d31] border border-[#23375c] rounded-xl text-sm text-white focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-slate-500 font-semibold"
                   />
                 </div>
                 <div>
@@ -331,7 +340,7 @@ export default function ChecklistMotorista() {
                     placeholder="Ex: 150.5"
                     value={litrosAbastecidos}
                     onChange={(e) => setLitrosAbastecidos(e.target.value)}
-                    className="w-full p-3 bg-slate-800 border border-slate-700 rounded-xl text-sm text-white focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-slate-500 font-semibold"
+                    className="w-full p-3 bg-[#131d31] border border-[#23375c] rounded-xl text-sm text-white focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-slate-500 font-semibold"
                   />
                 </div>
               </div>
@@ -347,7 +356,7 @@ export default function ChecklistMotorista() {
                     placeholder="Ex: 850.00"
                     value={precoTotalCombustivel}
                     onChange={(e) => setPrecoTotalCombustivel(e.target.value)}
-                    className="w-full p-3 bg-slate-800 border border-slate-700 rounded-xl text-sm text-white focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-slate-500 font-semibold"
+                    className="w-full p-3 bg-[#131d31] border border-[#23375c] rounded-xl text-sm text-white focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-slate-500 font-semibold"
                   />
                 </div>
                 <div>
@@ -360,7 +369,7 @@ export default function ChecklistMotorista() {
                     placeholder="Ex: 120.00"
                     value={precoTotalOleo}
                     onChange={(e) => setPrecoTotalOleo(e.target.value)}
-                    className="w-full p-3 bg-slate-800 border border-slate-700 rounded-xl text-sm text-white focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-slate-500 font-semibold"
+                    className="w-full p-3 bg-[#131d31] border border-[#23375c] rounded-xl text-sm text-white focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-slate-500 font-semibold"
                   />
                 </div>
                 <div>
@@ -373,7 +382,7 @@ export default function ChecklistMotorista() {
                       readOnly
                       placeholder="Clique no botão"
                       value={localizacaoPosto}
-                      className="w-full p-3 bg-slate-800 border border-slate-700 rounded-xl text-xs text-slate-300 focus:outline-none"
+                      className="w-full p-3 bg-[#131d31] border border-[#23375c] rounded-xl text-xs text-slate-300 focus:outline-none"
                     />
                     <button
                       type="button"
@@ -388,8 +397,8 @@ export default function ChecklistMotorista() {
 
               {/* MAPA INTERATIVO EM TEMPO REAL */}
               {coordsGPS && (
-                <div className="mt-3 overflow-hidden rounded-2xl border border-slate-700 shadow-lg">
-                  <div className="bg-slate-800 px-3 py-2 text-xs font-semibold text-slate-300 flex justify-between items-center">
+                <div className="mt-3 overflow-hidden rounded-2xl border border-[#23375c] shadow-lg">
+                  <div className="bg-[#131d31] px-3 py-2 text-xs font-semibold text-slate-300 flex justify-between items-center">
                     <span>🗺️ Visualização do Posto em Tempo Real</span>
                     <span className="text-[10px] text-emerald-400 font-mono">GPS Ativo ✓</span>
                   </div>
@@ -408,19 +417,19 @@ export default function ChecklistMotorista() {
 
               {/* Bloco com os Cálculos Automáticos Separados */}
               <div className="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-3">
-                <div className="p-3 bg-blue-950/30 border border-blue-500/30 rounded-xl text-center">
+                <div className="p-3 bg-[#0c182c] border border-blue-900/40 rounded-xl text-center">
                   <span className="text-[11px] text-blue-300 font-bold uppercase tracking-wider block">Média do Veículo</span>
                   <span className="text-xl font-extrabold text-blue-400">{dadosCalculados.mediaConsumo}</span>
                   <span className="text-xs text-slate-300 ml-1">KM/L</span>
                 </div>
 
-                <div className="p-3 bg-slate-800/80 border border-slate-700 rounded-xl text-center">
+                <div className="p-3 bg-[#131d31] border border-[#23375c] rounded-xl text-center">
                   <span className="text-[11px] text-slate-400 font-bold uppercase tracking-wider block">Custo Combustível/KM</span>
                   <span className="text-xl font-extrabold text-emerald-400">R$ {dadosCalculados.custoKmCombustivel}</span>
                   <span className="text-xs text-slate-400 ml-1">/km</span>
                 </div>
 
-                <div className="p-3 bg-slate-800/80 border border-slate-700 rounded-xl text-center">
+                <div className="p-3 bg-[#131d31] border border-[#23375c] rounded-xl text-center">
                   <span className="text-[11px] text-slate-400 font-bold uppercase tracking-wider block">Custo Óleo/KM</span>
                   <span className="text-xl font-extrabold text-amber-400">R$ {dadosCalculados.custoKmOleo}</span>
                   <span className="text-xs text-slate-400 ml-1">/km</span>
@@ -428,14 +437,14 @@ export default function ChecklistMotorista() {
               </div>
             </div>
 
-            <div className="bg-slate-900/50 p-5 rounded-2xl border border-slate-800/80">
+            <div className="bg-[#090f1a]/60 p-5 rounded-2xl border border-[#1b2a4a]/70">
               <label className="block font-bold text-sm uppercase tracking-wider text-slate-400 mb-2">
                 Manutenção a Fazer?
               </label>
               <select
                 value={manutencaoNecessaria}
                 onChange={(e) => setManutencaoNecessaria(e.target.value)}
-                className="w-full p-3 bg-slate-800 border border-slate-700 rounded-xl text-sm text-white focus:outline-none focus:ring-2 focus:ring-blue-500 mb-3"
+                className="w-full p-3 bg-[#131d31] border border-[#23375c] rounded-xl text-sm text-white focus:outline-none focus:ring-2 focus:ring-blue-500 mb-3"
               >
                 <option value="nao">Não</option>
                 <option value="sim">Sim</option>
@@ -448,12 +457,12 @@ export default function ChecklistMotorista() {
                   placeholder="Descreva detalhadamente o que precisa de manutenção..."
                   value={detalhesManutencao}
                   onChange={(e) => setDetalhesManutencao(e.target.value)}
-                  className="w-full p-3 bg-slate-800 border border-amber-500/50 rounded-xl text-sm text-white focus:outline-none focus:ring-2 focus:ring-amber-500 placeholder-slate-500 mt-1"
+                  className="w-full p-3 bg-[#131d31] border border-amber-500/50 rounded-xl text-sm text-white focus:outline-none focus:ring-2 focus:ring-amber-500 placeholder-slate-500 mt-1"
                 />
               )}
             </div>
 
-            <div className="bg-slate-900/50 p-5 rounded-2xl border border-slate-800/80">
+            <div className="bg-[#090f1a]/60 p-5 rounded-2xl border border-[#1b2a4a]/70">
               <h2 className="font-bold text-sm uppercase tracking-wider text-slate-400 mb-3">
                 ⏱️ Registro da Última Troca de Óleo:
               </h2>
@@ -464,7 +473,7 @@ export default function ChecklistMotorista() {
                     type="date"
                     value={dataTrocaOleo}
                     onChange={(e) => setDataTrocaOleo(e.target.value)}
-                    className="w-full p-2.5 bg-slate-800 border border-slate-700 rounded-xl text-xs text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full p-2.5 bg-[#131d31] border border-[#23375c] rounded-xl text-xs text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
                 <div>
@@ -473,7 +482,7 @@ export default function ChecklistMotorista() {
                     type="time"
                     value={horaTrocaOleo}
                     onChange={(e) => setHoraTrocaOleo(e.target.value)}
-                    className="w-full p-2.5 bg-slate-800 border border-slate-700 rounded-xl text-xs text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full p-2.5 bg-[#131d31] border border-[#23375c] rounded-xl text-xs text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
                 <div>
@@ -483,13 +492,13 @@ export default function ChecklistMotorista() {
                     placeholder="Ex: 140000"
                     value={kmTrocaOleo}
                     onChange={(e) => setKmTrocaOleo(e.target.value)}
-                    className="w-full p-2.5 bg-slate-800 border border-slate-700 rounded-xl text-xs text-white focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-slate-500"
+                    className="w-full p-2.5 bg-[#131d31] border border-[#23375c] rounded-xl text-xs text-white focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-slate-500"
                   />
                 </div>
               </div>
             </div>
 
-            <div className="bg-slate-900/50 p-5 rounded-2xl border border-slate-800/80">
+            <div className="bg-[#090f1a]/60 p-5 rounded-2xl border border-[#1b2a4a]/70">
               <label className="block font-bold text-sm uppercase tracking-wider text-slate-400 mb-2">
                 Observações Gerais
               </label>
@@ -498,7 +507,7 @@ export default function ChecklistMotorista() {
                 placeholder="Descreva aqui se houver algo mais..."
                 value={observacoes}
                 onChange={(e) => setObservacoes(e.target.value)}
-                className="w-full p-3 bg-slate-800 border border-slate-700 rounded-xl text-sm text-white focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-slate-500"
+                className="w-full p-3 bg-[#131d31] border border-[#23375c] rounded-xl text-sm text-white focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-slate-500"
               />
             </div>
 
