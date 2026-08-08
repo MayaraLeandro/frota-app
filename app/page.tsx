@@ -126,7 +126,7 @@ export default function ChecklistMotorista() {
               </div>
             </div>
 
-            {/* Itens de Inspeção com Câmera Direta Estilo Marca d'Água */}
+            {/* Itens de Inspeção com Ícone de Câmera Discreto */}
             <div className="bg-slate-900/50 p-5 rounded-2xl border border-slate-800/80 space-y-4">
               <h2 className="font-bold text-sm uppercase tracking-wider text-slate-400 mb-3">
                 Itens de Inspeção Diária:
@@ -147,7 +147,7 @@ export default function ChecklistMotorista() {
                   </div>
                   <div className="flex items-center gap-2">
                     {fotoOleo && <span className="text-[11px] text-emerald-400 font-medium">Capturado ✓</span>}
-                    <label className="cursor-pointer p-2 rounded-lg hover:bg-slate-700/80 transition text-slate-400 hover:text-white" title="Tirar foto na hora">
+                    <label className="cursor-pointer opacity-40 hover:opacity-100 transition text-slate-400 hover:text-white p-1" title="Tirar foto na hora">
                       <span className="text-lg">📷</span>
                       <input type="file" accept="image/*" capture="environment" className="hidden" onChange={(e) => handleFotoChange(e, setFotoOleo)} />
                     </label>
@@ -167,7 +167,7 @@ export default function ChecklistMotorista() {
                   </div>
                   <div className="flex items-center gap-2">
                     {fotoPneus && <span className="text-[11px] text-emerald-400 font-medium">Capturado ✓</span>}
-                    <label className="cursor-pointer p-2 rounded-lg hover:bg-slate-700/80 transition text-slate-400 hover:text-white" title="Tirar foto na hora">
+                    <label className="cursor-pointer opacity-40 hover:opacity-100 transition text-slate-400 hover:text-white p-1" title="Tirar foto na hora">
                       <span className="text-lg">📷</span>
                       <input type="file" accept="image/*" capture="environment" className="hidden" onChange={(e) => handleFotoChange(e, setFotoPneus)} />
                     </label>
@@ -187,7 +187,7 @@ export default function ChecklistMotorista() {
                   </div>
                   <div className="flex items-center gap-2">
                     {fotoBau && <span className="text-[11px] text-emerald-400 font-medium">Capturado ✓</span>}
-                    <label className="cursor-pointer p-2 rounded-lg hover:bg-slate-700/80 transition text-slate-400 hover:text-white" title="Tirar foto na hora">
+                    <label className="cursor-pointer opacity-40 hover:opacity-100 transition text-slate-400 hover:text-white p-1" title="Tirar foto na hora">
                       <span className="text-lg">📷</span>
                       <input type="file" accept="image/*" capture="environment" className="hidden" onChange={(e) => handleFotoChange(e, setFotoBau)} />
                     </label>
@@ -207,7 +207,7 @@ export default function ChecklistMotorista() {
                   </div>
                   <div className="flex items-center gap-2">
                     {fotoParaBrisas && <span className="text-[11px] text-emerald-400 font-medium">Capturado ✓</span>}
-                    <label className="cursor-pointer p-2 rounded-lg hover:bg-slate-700/80 transition text-slate-400 hover:text-white" title="Tirar foto na hora">
+                    <label className="cursor-pointer opacity-40 hover:opacity-100 transition text-slate-400 hover:text-white p-1" title="Tirar foto na hora">
                       <span className="text-lg">📷</span>
                       <input type="file" accept="image/*" capture="environment" className="hidden" onChange={(e) => handleFotoChange(e, setFotoParaBrisas)} />
                     </label>
@@ -227,7 +227,7 @@ export default function ChecklistMotorista() {
                   </div>
                   <div className="flex items-center gap-2">
                     {fotoFunilaria && <span className="text-[11px] text-emerald-400 font-medium">Capturado ✓</span>}
-                    <label className="cursor-pointer p-2 rounded-lg hover:bg-slate-700/80 transition text-slate-400 hover:text-white" title="Tirar foto na hora">
+                    <label className="cursor-pointer opacity-40 hover:opacity-100 transition text-slate-400 hover:text-white p-1" title="Tirar foto na hora">
                       <span className="text-lg">📷</span>
                       <input type="file" accept="image/*" capture="environment" className="hidden" onChange={(e) => handleFotoChange(e, setFotoFunilaria)} />
                     </label>
