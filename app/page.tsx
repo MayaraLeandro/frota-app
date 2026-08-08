@@ -7,18 +7,15 @@ export default function ChecklistMotorista() {
   const [placa, setPlaca] = useState("");
   const [km, setKm] = useState("");
   
-  // Itens de Inspeção atualizados
-  const [nivelOleoOk, setNivelOleoOk] = useState(true);
   const [pneusOk, setPneusOk] = useState(true);
+  const [nivelOleoOk, setNivelOleoOk] = useState(true);
   const [infiltracaoBauOk, setInfiltracaoBauOk] = useState(true);
   const [paraBrisasOk, setParaBrisasOk] = useState(true);
   const [funilariaOk, setFunilariaOk] = useState(true);
 
-  // Manutenção a Fazer (Sim/Não) e detalhes
   const [manutencaoNecessaria, setManutencaoNecessaria] = useState("nao");
   const [detalhesManutencao, setDetalhesManutencao] = useState("");
 
-  // Última Troca de Óleo
   const [dataTrocaOleo, setDataTrocaOleo] = useState("");
   const [horaTrocaOleo, setHoraTrocaOleo] = useState("");
   const [kmTrocaOleo, setKmTrocaOleo] = useState("");
@@ -35,152 +32,155 @@ export default function ChecklistMotorista() {
   const urlChecklist = "https://frota-app-ruddy.vercel.app";
 
   return (
-    <main className="min-h-screen bg-gray-100 p-4 sm:p-8 text-gray-800">
-      <div className="max-w-md mx-auto bg-white rounded-2xl shadow-xl p-6">
-        <h1 className="text-2xl font-bold text-center text-blue-600 mb-1">
-          🚛 Controle de Frota
-        </h1>
-        <p className="text-sm text-center text-gray-500 mb-4">
-          Checklist Diário do Motorista
-        </p>
-
-        {/* Botão para alternar exibição do QR Code */}
-        <div className="text-center mb-6">
+    <main className="min-h-screen bg-[#0b0f19] p-4 sm:p-8 text-slate-100 flex items-center justify-center font-sans">
+      <div className="max-w-4xl w-full bg-[#131b2e] rounded-3xl shadow-2xl p-6 sm:p-10 border border-slate-800">
+        
+        {/* Topo / Cabeçalho */}
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 pb-6 border-b border-slate-800">
+          <div>
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-white flex items-center gap-3">
+              <span className="text-blue-500 bg-blue-500/10 p-2 rounded-xl">🚛</span> Controle de Frota
+            </h1>
+            <p className="text-sm text-slate-400 mt-1">
+              Painel Inteligente de Checklist Diário do Motorista
+            </p>
+          </div>
+          
           <button
             type="button"
             onClick={() => setMostrarQrCode(!mostrarQrCode)}
-            className="text-xs bg-gray-200 hover:bg-gray-300 text-gray-700 px-3 py-1.5 rounded-full font-medium transition"
+            className="mt-4 sm:mt-0 text-xs bg-slate-800 hover:bg-slate-700 text-slate-300 px-4 py-2.5 rounded-xl font-semibold transition border border-slate-700"
           >
-            {mostrarQrCode ? "✕ Fechar QR Code" : "📱 Ver QR Code para Impressão"}
+            {mostrarQrCode ? "✕ Fechar QR Code" : "📱 Ver QR Code"}
           </button>
-
-          {mostrarQrCode && (
-            <div className="mt-4 p-4 bg-gray-50 rounded-lg border border-gray-200 flex flex-col items-center">
-              <p className="text-xs text-gray-600 mb-3 font-semibold">
-                Escaneie para abrir o checklist no celular:
-              </p>
-              <div className="bg-white p-3 rounded shadow-sm">
-                <QRCodeSVG value={urlChecklist} size={160} />
-              </div>
-              <span className="text-[10px] text-gray-400 mt-2">{urlChecklist}</span>
-            </div>
-          )}
         </div>
 
+        {mostrarQrCode && (
+          <div className="mb-8 p-6 bg-slate-900/90 rounded-2xl border border-slate-700 flex flex-col items-center">
+            <p className="text-xs text-slate-300 mb-3 font-semibold">
+              Escaneie para abrir o checklist no celular:
+            </p>
+            <div className="bg-white p-3 rounded-xl shadow-lg">
+              <QRCodeSVG value={urlChecklist} size={160} />
+            </div>
+            <span className="text-[11px] text-slate-500 mt-3">{urlChecklist}</span>
+          </div>
+        )}
+
         {enviado ? (
-          <div className="bg-green-100 border border-green-400 text-green-700 p-4 rounded-xl text-center">
-            <h2 className="font-bold text-lg">Checklist Enviado!</h2>
-            <p className="text-sm mt-1">Veículo liberado para rodar.</p>
+          <div className="bg-emerald-950/40 border border-emerald-500/30 text-emerald-300 p-8 rounded-2xl text-center">
+            <h2 className="font-bold text-2xl mb-2">Checklist Enviado com Sucesso!</h2>
+            <p className="text-sm text-emerald-400/80 mb-6">O veículo foi liberado para a operação de hoje.</p>
             <button
               onClick={() => setEnviado(false)}
-              className="mt-4 bg-green-600 text-white px-4 py-2 rounded-lg font-semibold text-sm hover:bg-green-700 transition"
+              className="bg-emerald-600 hover:bg-emerald-500 text-white px-6 py-3 rounded-xl font-semibold text-sm transition shadow-lg"
             >
-              Novo Registro
+              Fazer Novo Registro
             </button>
           </div>
         ) : (
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-6">
             
-            {/* Placa */}
-            <div>
-              <label className="block text-sm font-medium mb-1 text-gray-700">
-                Placa do Veículo
-              </label>
-              <input
-                type="text"
-                required
-                placeholder="ABC-1234"
-                value={placa}
-                onChange={(e) => setPlaca(e.target.value.toUpperCase())}
-                className="w-full p-2.5 border rounded-lg border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
-
-            {/* Quilometragem */}
-            <div>
-              <label className="block text-sm font-medium mb-1 text-gray-700">
-                Quilometragem Atual (KM)
-              </label>
-              <input
-                type="number"
-                required
-                placeholder="150000"
-                value={km}
-                onChange={(e) => setKm(e.target.value)}
-                className="w-full p-2.5 border rounded-lg border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
-
-            <hr className="my-4 border-gray-200" />
-
-            <h2 className="font-semibold text-sm text-gray-700">
-              Itens de Inspeção:
-            </h2>
-
-            {/* Checkboxes de Inspeção */}
-            <div className="space-y-2">
-              <div className="flex items-center justify-between p-2.5 bg-gray-50 rounded-lg border border-gray-200">
-                <span className="text-sm text-gray-700">Nível de Óleo OK</span>
+            {/* Seção Veículo (Placa e KM) */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-slate-900/50 p-5 rounded-2xl border border-slate-800/80">
+              <div>
+                <label className="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">
+                  Placa do Veículo
+                </label>
                 <input
-                  type="checkbox"
-                  checked={nivelOleoOk}
-                  onChange={(e) => setNivelOleoOk(e.target.checked)}
-                  className="w-5 h-5 accent-blue-600 rounded cursor-pointer"
+                  type="text"
+                  required
+                  placeholder="ABC-1234"
+                  value={placa}
+                  onChange={(e) => setPlaca(e.target.value.toUpperCase())}
+                  className="w-full p-3 bg-slate-800 border border-slate-700 rounded-xl text-sm text-white focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-slate-500 font-semibold"
                 />
               </div>
-
-              <div className="flex items-center justify-between p-2.5 bg-gray-50 rounded-lg border border-gray-200">
-                <span className="text-sm text-gray-700">Pneus (Calibragem / Estado)</span>
+              <div>
+                <label className="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">
+                  Quilometragem Atual (KM)
+                </label>
                 <input
-                  type="checkbox"
-                  checked={pneusOk}
-                  onChange={(e) => setPneusOk(e.target.checked)}
-                  className="w-5 h-5 accent-blue-600 rounded cursor-pointer"
-                />
-              </div>
-
-              <div className="flex items-center justify-between p-2.5 bg-gray-50 rounded-lg border border-gray-200">
-                <span className="text-sm text-gray-700">Infiltração no Baú</span>
-                <input
-                  type="checkbox"
-                  checked={infiltracaoBauOk}
-                  onChange={(e) => setInfiltracaoBauOk(e.target.checked)}
-                  className="w-5 h-5 accent-blue-600 rounded cursor-pointer"
-                />
-              </div>
-
-              <div className="flex items-center justify-between p-2.5 bg-gray-50 rounded-lg border border-gray-200">
-                <span className="text-sm text-gray-700">Para-brisas</span>
-                <input
-                  type="checkbox"
-                  checked={paraBrisasOk}
-                  onChange={(e) => setParaBrisasOk(e.target.checked)}
-                  className="w-5 h-5 accent-blue-600 rounded cursor-pointer"
-                />
-              </div>
-
-              <div className="flex items-center justify-between p-2.5 bg-gray-50 rounded-lg border border-gray-200">
-                <span className="text-sm text-gray-700">Sem Avarias / Amassados</span>
-                <input
-                  type="checkbox"
-                  checked={funilariaOk}
-                  onChange={(e) => setFunilariaOk(e.target.checked)}
-                  className="w-5 h-5 accent-blue-600 rounded cursor-pointer"
+                  type="number"
+                  required
+                  placeholder="Ex: 150000"
+                  value={km}
+                  onChange={(e) => setKm(e.target.value)}
+                  className="w-full p-3 bg-slate-800 border border-slate-700 rounded-xl text-sm text-white focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-slate-500 font-semibold"
                 />
               </div>
             </div>
 
-            <hr className="my-4 border-gray-200" />
+            {/* Cards de Inspeção */}
+            <div className="bg-slate-900/50 p-5 rounded-2xl border border-slate-800/80 space-y-4">
+              <h2 className="font-bold text-sm uppercase tracking-wider text-slate-400 mb-3">
+                Itens de Inspeção Diária:
+              </h2>
 
-            {/* Manutenção a Fazer (Sim/Não) */}
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                
+                <div className="flex items-center justify-between p-3.5 bg-slate-800/60 rounded-xl border border-slate-700/60">
+                  <span className="text-sm text-slate-200 font-medium">🛢️ Nível de Óleo OK</span>
+                  <input
+                    type="checkbox"
+                    checked={nivelOleoOk}
+                    onChange={(e) => setNivelOleoOk(e.target.checked)}
+                    className="w-5 h-5 accent-blue-600 rounded cursor-pointer"
+                  />
+                </div>
+
+                <div className="flex items-center justify-between p-3.5 bg-slate-800/60 rounded-xl border border-slate-700/60">
+                  <span className="text-sm text-slate-200 font-medium">🚗 Pneus (Calibragem)</span>
+                  <input
+                    type="checkbox"
+                    checked={pneusOk}
+                    onChange={(e) => setPneusOk(e.target.checked)}
+                    className="w-5 h-5 accent-blue-600 rounded cursor-pointer"
+                  />
+                </div>
+
+                <div className="flex items-center justify-between p-3.5 bg-slate-800/60 rounded-xl border border-slate-700/60">
+                  <span className="text-sm text-slate-200 font-medium">📦 Infiltração no Baú</span>
+                  <input
+                    type="checkbox"
+                    checked={infiltracaoBauOk}
+                    onChange={(e) => setInfiltracaoBauOk(e.target.checked)}
+                    className="w-5 h-5 accent-blue-600 rounded cursor-pointer"
+                  />
+                </div>
+
+                <div className="flex items-center justify-between p-3.5 bg-slate-800/60 rounded-xl border border-slate-700/60">
+                  <span className="text-sm text-slate-200 font-medium">🪟 Para-brisas</span>
+                  <input
+                    type="checkbox"
+                    checked={paraBrisasOk}
+                    onChange={(e) => setParaBrisasOk(e.target.checked)}
+                    className="w-5 h-5 accent-blue-600 rounded cursor-pointer"
+                  />
+                </div>
+
+                <div className="flex items-center justify-between p-3.5 bg-slate-800/60 rounded-xl border border-slate-700/60 sm:col-span-2">
+                  <span className="text-sm text-slate-200 font-medium">🛡️ Sem Avarias / Amassados</span>
+                  <input
+                    type="checkbox"
+                    checked={funilariaOk}
+                    onChange={(e) => setFunilariaOk(e.target.checked)}
+                    className="w-5 h-5 accent-blue-600 rounded cursor-pointer"
+                  />
+                </div>
+
+              </div>
+            </div>
+
+            {/* Manutenção a Fazer */}
+            <div className="bg-slate-900/50 p-5 rounded-2xl border border-slate-800/80">
+              <label className="block font-bold text-sm uppercase tracking-wider text-slate-400 mb-2">
                 Manutenção a Fazer?
               </label>
               <select
                 value={manutencaoNecessaria}
                 onChange={(e) => setManutencaoNecessaria(e.target.value)}
-                className="w-full p-2.5 border rounded-lg border-gray-300 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 mb-3"
+                className="w-full p-3 bg-slate-800 border border-slate-700 rounded-xl text-sm text-white focus:outline-none focus:ring-2 focus:ring-blue-500 mb-3"
               >
                 <option value="nao">Não</option>
                 <option value="sim">Sim</option>
@@ -190,56 +190,54 @@ export default function ChecklistMotorista() {
                 <textarea
                   rows={3}
                   required
-                  placeholder="Descreva o que precisa de manutenção..."
+                  placeholder="Descreva detalhadamente o que precisa de manutenção..."
                   value={detalhesManutencao}
                   onChange={(e) => setDetalhesManutencao(e.target.value)}
-                  className="w-full p-2.5 border rounded-lg border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-yellow-50"
+                  className="w-full p-3 bg-slate-800 border border-amber-500/50 rounded-xl text-sm text-white focus:outline-none focus:ring-2 focus:ring-amber-500 placeholder-slate-500 mt-1"
                 />
               )}
             </div>
 
-            <hr className="my-4 border-gray-200" />
-
             {/* Última Troca de Óleo */}
-            <div>
-              <h2 className="font-semibold text-sm text-gray-700 mb-2">
-                Última Troca de Óleo:
+            <div className="bg-slate-900/50 p-5 rounded-2xl border border-slate-800/80">
+              <h2 className="font-bold text-sm uppercase tracking-wider text-slate-400 mb-3">
+                ⏱️ Registro da Última Troca de Óleo:
               </h2>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <div>
-                  <label className="block text-xs text-gray-500 mb-1">Data</label>
+                  <label className="block text-xs text-slate-400 mb-1">Data</label>
                   <input
                     type="date"
                     value={dataTrocaOleo}
                     onChange={(e) => setDataTrocaOleo(e.target.value)}
-                    className="w-full p-2 border rounded-lg border-gray-300 text-xs focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full p-2.5 bg-slate-800 border border-slate-700 rounded-xl text-xs text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs text-gray-500 mb-1">Hora</label>
+                  <label className="block text-xs text-slate-400 mb-1">Hora</label>
                   <input
                     type="time"
                     value={horaTrocaOleo}
                     onChange={(e) => setHoraTrocaOleo(e.target.value)}
-                    className="w-full p-2 border rounded-lg border-gray-300 text-xs focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full p-2.5 bg-slate-800 border border-slate-700 rounded-xl text-xs text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs text-gray-500 mb-1">KM da Troca</label>
+                  <label className="block text-xs text-slate-400 mb-1">KM da Troca</label>
                   <input
                     type="number"
                     placeholder="Ex: 140000"
                     value={kmTrocaOleo}
                     onChange={(e) => setKmTrocaOleo(e.target.value)}
-                    className="w-full p-2 border rounded-lg border-gray-300 text-xs focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full p-2.5 bg-slate-800 border border-slate-700 rounded-xl text-xs text-white focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-slate-500"
                   />
                 </div>
               </div>
             </div>
 
             {/* Observações Gerais */}
-            <div>
-              <label className="block text-sm font-medium mb-1 mt-3 text-gray-700">
+            <div className="bg-slate-900/50 p-5 rounded-2xl border border-slate-800/80">
+              <label className="block font-bold text-sm uppercase tracking-wider text-slate-400 mb-2">
                 Observações Gerais
               </label>
               <textarea
@@ -247,16 +245,18 @@ export default function ChecklistMotorista() {
                 placeholder="Descreva aqui se houver algo mais..."
                 value={observacoes}
                 onChange={(e) => setObservacoes(e.target.value)}
-                className="w-full p-2.5 border rounded-lg border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full p-3 bg-slate-800 border border-slate-700 rounded-xl text-sm text-white focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-slate-500"
               />
             </div>
 
+            {/* Botão de Envio */}
             <button
               type="submit"
-              className="w-full bg-blue-600 text-white font-semibold py-3 rounded-xl hover:bg-blue-700 transition shadow-md mt-4"
+              className="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-4 rounded-2xl transition shadow-xl text-base flex items-center justify-center gap-2 mt-4"
             >
-              Enviar Inspeção
+              🚀 Salvar Checklist Moderno
             </button>
+
           </form>
         )}
       </div>
