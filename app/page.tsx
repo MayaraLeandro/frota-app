@@ -13,6 +13,13 @@ export default function ChecklistMotorista() {
   const [paraBrisasOk, setParaBrisasOk] = useState(true);
   const [funilariaOk, setFunilariaOk] = useState(true);
 
+  // Estados para armazenar as fotos de cada item
+  const [fotoPneus, setFotoPneus] = useState<string | null>(null);
+  const [fotoOleo, setFotoOleo] = useState<string | null>(null);
+  const [fotoBau, setFotoBau] = useState<string | null>(null);
+  const [fotoParaBrisas, setFotoParaBrisas] = useState<string | null>(null);
+  const [fotoFunilaria, setFotoFunilaria] = useState<string | null>(null);
+
   const [manutencaoNecessaria, setManutencaoNecessaria] = useState("nao");
   const [detalhesManutencao, setDetalhesManutencao] = useState("");
 
@@ -23,6 +30,18 @@ export default function ChecklistMotorista() {
   const [observacoes, setObservacoes] = useState("");
   const [enviado, setEnviado] = useState(false);
   const [mostrarQrCode, setMostrarQrCode] = useState(false);
+
+  // Função auxiliar para capturar a imagem e converter em preview
+  const handleFotoChange = (e: React.ChangeEvent<HTMLInputElement>, setFoto: (val: string | null) => void) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setFoto(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -111,62 +130,112 @@ export default function ChecklistMotorista() {
               </div>
             </div>
 
-            {/* Cards de Inspeção */}
+            {/* Cards de Inspeção com Câmera */}
             <div className="bg-slate-900/50 p-5 rounded-2xl border border-slate-800/80 space-y-4">
               <h2 className="font-bold text-sm uppercase tracking-wider text-slate-400 mb-3">
-                Itens de Inspeção Diária:
+                Itens de Inspeção Diária e Auditoria por Foto:
               </h2>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 gap-3">
                 
-                <div className="flex items-center justify-between p-3.5 bg-slate-800/60 rounded-xl border border-slate-700/60">
-                  <span className="text-sm text-slate-200 font-medium">🛢️ Nível de Óleo OK</span>
-                  <input
-                    type="checkbox"
-                    checked={nivelOleoOk}
-                    onChange={(e) => setNivelOleoOk(e.target.checked)}
-                    className="w-5 h-5 accent-blue-600 rounded cursor-pointer"
-                  />
+                {/* Nível de Óleo */}
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-3.5 bg-slate-800/60 rounded-xl border border-slate-700/60 gap-3">
+                  <div className="flex items-center gap-3 w-full sm:w-auto">
+                    <input
+                      type="checkbox"
+                      checked={nivelOleoOk}
+                      onChange={(e) => setNivelOleoOk(e.target.checked)}
+                      className="w-5 h-5 accent-blue-600 rounded cursor-pointer"
+                    />
+                    <span className="text-sm text-slate-200 font-medium">🛢️ Nível de Óleo OK</span>
+                  </div>
+                  <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
+                    {fotoOleo && <span className="text-xs text-emerald-400 font-semibold">✓ Foto Anexada</span>}
+                    <label className="cursor-pointer bg-slate-700 hover:bg-slate-600 text-white text-xs px-3 py-2 rounded-lg flex items-center gap-1.5 transition border border-slate-600">
+                      📷 {fotoOleo ? "Trocar Foto" : "Tirar Foto"}
+                      <input type="file" accept="image/*" capture="environment" className="hidden" onChange={(e) => handleFotoChange(e, setFotoOleo)} />
+                    </label>
+                  </div>
                 </div>
 
-                <div className="flex items-center justify-between p-3.5 bg-slate-800/60 rounded-xl border border-slate-700/60">
-                  <span className="text-sm text-slate-200 font-medium">🚗 Pneus (Calibragem)</span>
-                  <input
-                    type="checkbox"
-                    checked={pneusOk}
-                    onChange={(e) => setPneusOk(e.target.checked)}
-                    className="w-5 h-5 accent-blue-600 rounded cursor-pointer"
-                  />
+                {/* Pneus */}
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-3.5 bg-slate-800/60 rounded-xl border border-slate-700/60 gap-3">
+                  <div className="flex items-center gap-3 w-full sm:w-auto">
+                    <input
+                      type="checkbox"
+                      checked={pneusOk}
+                      onChange={(e) => setPneusOk(e.target.checked)}
+                      className="w-5 h-5 accent-blue-600 rounded cursor-pointer"
+                    />
+                    <span className="text-sm text-slate-200 font-medium">🚗 Pneus (Calibragem)</span>
+                  </div>
+                  <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
+                    {fotoPneus && <span className="text-xs text-emerald-400 font-semibold">✓ Foto Anexada</span>}
+                    <label className="cursor-pointer bg-slate-700 hover:bg-slate-600 text-white text-xs px-3 py-2 rounded-lg flex items-center gap-1.5 transition border border-slate-600">
+                      📷 {fotoPneus ? "Trocar Foto" : "Tirar Foto"}
+                      <input type="file" accept="image/*" capture="environment" className="hidden" onChange={(e) => handleFotoChange(e, setFotoPneus)} />
+                    </label>
+                  </div>
                 </div>
 
-                <div className="flex items-center justify-between p-3.5 bg-slate-800/60 rounded-xl border border-slate-700/60">
-                  <span className="text-sm text-slate-200 font-medium">📦 Infiltração no Baú</span>
-                  <input
-                    type="checkbox"
-                    checked={infiltracaoBauOk}
-                    onChange={(e) => setInfiltracaoBauOk(e.target.checked)}
-                    className="w-5 h-5 accent-blue-600 rounded cursor-pointer"
-                  />
+                {/* Infiltração no Baú */}
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-3.5 bg-slate-800/60 rounded-xl border border-slate-700/60 gap-3">
+                  <div className="flex items-center gap-3 w-full sm:w-auto">
+                    <input
+                      type="checkbox"
+                      checked={infiltracaoBauOk}
+                      onChange={(e) => setInfiltracaoBauOk(e.target.checked)}
+                      className="w-5 h-5 accent-blue-600 rounded cursor-pointer"
+                    />
+                    <span className="text-sm text-slate-200 font-medium">📦 Infiltração no Baú</span>
+                  </div>
+                  <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
+                    {fotoBau && <span className="text-xs text-emerald-400 font-semibold">✓ Foto Anexada</span>}
+                    <label className="cursor-pointer bg-slate-700 hover:bg-slate-600 text-white text-xs px-3 py-2 rounded-lg flex items-center gap-1.5 transition border border-slate-600">
+                      📷 {fotoBau ? "Trocar Foto" : "Tirar Foto"}
+                      <input type="file" accept="image/*" capture="environment" className="hidden" onChange={(e) => handleFotoChange(e, setFotoBau)} />
+                    </label>
+                  </div>
                 </div>
 
-                <div className="flex items-center justify-between p-3.5 bg-slate-800/60 rounded-xl border border-slate-700/60">
-                  <span className="text-sm text-slate-200 font-medium">🪟 Para-brisas</span>
-                  <input
-                    type="checkbox"
-                    checked={paraBrisasOk}
-                    onChange={(e) => setParaBrisasOk(e.target.checked)}
-                    className="w-5 h-5 accent-blue-600 rounded cursor-pointer"
-                  />
+                {/* Para-brisas */}
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-3.5 bg-slate-800/60 rounded-xl border border-slate-700/60 gap-3">
+                  <div className="flex items-center gap-3 w-full sm:w-auto">
+                    <input
+                      type="checkbox"
+                      checked={paraBrisasOk}
+                      onChange={(e) => setParaBrisasOk(e.target.checked)}
+                      className="w-5 h-5 accent-blue-600 rounded cursor-pointer"
+                    />
+                    <span className="text-sm text-slate-200 font-medium">🪟 Para-brisas</span>
+                  </div>
+                  <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
+                    {fotoParaBrisas && <span className="text-xs text-emerald-400 font-semibold">✓ Foto Anexada</span>}
+                    <label className="cursor-pointer bg-slate-700 hover:bg-slate-600 text-white text-xs px-3 py-2 rounded-lg flex items-center gap-1.5 transition border border-slate-600">
+                      📷 {fotoParaBrisas ? "Trocar Foto" : "Tirar Foto"}
+                      <input type="file" accept="image/*" capture="environment" className="hidden" onChange={(e) => handleFotoChange(e, setFotoParaBrisas)} />
+                    </label>
+                  </div>
                 </div>
 
-                <div className="flex items-center justify-between p-3.5 bg-slate-800/60 rounded-xl border border-slate-700/60 sm:col-span-2">
-                  <span className="text-sm text-slate-200 font-medium">🛡️ Sem Avarias / Amassados</span>
-                  <input
-                    type="checkbox"
-                    checked={funilariaOk}
-                    onChange={(e) => setFunilariaOk(e.target.checked)}
-                    className="w-5 h-5 accent-blue-600 rounded cursor-pointer"
-                  />
+                {/* Sem Avarias / Amassados */}
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-3.5 bg-slate-800/60 rounded-xl border border-slate-700/60 gap-3">
+                  <div className="flex items-center gap-3 w-full sm:w-auto">
+                    <input
+                      type="checkbox"
+                      checked={funilariaOk}
+                      onChange={(e) => setFunilariaOk(e.target.checked)}
+                      className="w-5 h-5 accent-blue-600 rounded cursor-pointer"
+                    />
+                    <span className="text-sm text-slate-200 font-medium">🛡️ Sem Avarias / Amassados</span>
+                  </div>
+                  <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
+                    {fotoFunilaria && <span className="text-xs text-emerald-400 font-semibold">✓ Foto Anexada</span>}
+                    <label className="cursor-pointer bg-slate-700 hover:bg-slate-600 text-white text-xs px-3 py-2 rounded-lg flex items-center gap-1.5 transition border border-slate-600">
+                      📷 {fotoFunilaria ? "Trocar Foto" : "Tirar Foto"}
+                      <input type="file" accept="image/*" capture="environment" className="hidden" onChange={(e) => handleFotoChange(e, setFotoFunilaria)} />
+                    </label>
+                  </div>
                 </div>
 
               </div>
@@ -254,7 +323,7 @@ export default function ChecklistMotorista() {
               type="submit"
               className="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-4 rounded-2xl transition shadow-xl text-base flex items-center justify-center gap-2 mt-4"
             >
-              🚀 Salvar Checklist Moderno
+              🚀 Salvar Checklist com Fotos
             </button>
 
           </form>
