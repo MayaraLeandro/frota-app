@@ -20,7 +20,6 @@ export default function ChecklistMotorista() {
   const [fotoParaBrisas, setFotoParaBrisas] = useState<string | null>(null);
   const [fotoFunilaria, setFotoFunilaria] = useState<string | null>(null);
 
-  // Estados Separados do Posto / Abastecimento e Custos
   const [kmAnteriorAbast, setKmAnteriorAbast] = useState("");
   const [kmAbastecimento, setKmAbastecimento] = useState("");
   const [litrosAbastecidos, setLitrosAbastecidos] = useState("");
@@ -40,8 +39,10 @@ export default function ChecklistMotorista() {
   const [observacoes, setObservacoes] = useState("");
   const [enviado, setEnviado] = useState(false);
   const [mostrarQrCode, setMostrarQrCode] = useState(false);
+  
+  // Estado para controlar se a logo carregou com sucesso
+  const [erroLogo, setErroLogo] = useState(false);
 
-  // Cálculos Automáticos
   const calcularDadosPosto = () => {
     const kmAnt = parseFloat(kmAnteriorAbast);
     const kmAtu = parseFloat(kmAbastecimento);
@@ -106,17 +107,22 @@ export default function ChecklistMotorista() {
     <main className="min-h-screen bg-[#070b14] p-4 sm:p-8 text-slate-100 flex items-center justify-center font-sans">
       <div className="max-w-4xl w-full bg-[#0e1626] rounded-3xl shadow-2xl p-6 sm:p-10 border border-[#1b2a4a]">
         
-        {/* CABEÇALHO COM A LOGO OFICIAL DA NJ TRANSPORTES */}
+        {/* CABEÇALHO */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 pb-6 border-b border-[#1b2a4a]">
           <div className="flex items-center gap-4">
-            <div className="bg-white p-2 rounded-2xl border border-[#23427f] flex items-center justify-center w-28 h-20 relative shadow-md">
-              <Image 
-                src="/logo.png" 
-                alt="Logo NJ Transportes" 
-                fill
-                className="object-contain"
-                priority
-              />
+            <div className="bg-white p-2 rounded-2xl border border-[#23427f] flex items-center justify-center w-28 h-20 relative shadow-md overflow-hidden">
+              {!erroLogo ? (
+                <Image 
+                  src="/logo.png" 
+                  alt="Logo NJ Transportes" 
+                  fill
+                  className="object-contain p-1"
+                  priority
+                  onError={() => setErroLogo(true)}
+                />
+              ) : (
+                <span className="text-2xl" title="Coloque sua logo.png na pasta public">🚚</span>
+              )}
             </div>
             <div>
               <h1 className="text-xl sm:text-2xl font-extrabold text-white tracking-wide">
@@ -192,7 +198,7 @@ export default function ChecklistMotorista() {
               </div>
             </div>
 
-            {/* Itens de Inspeção com Câmera Discreta */}
+            {/* Itens de Inspeção */}
             <div className="bg-[#090f1a]/60 p-5 rounded-2xl border border-[#1b2a4a]/70 space-y-4">
               <h2 className="font-bold text-sm uppercase tracking-wider text-slate-400 mb-3">
                 Itens de Inspeção Diária:
@@ -303,7 +309,7 @@ export default function ChecklistMotorista() {
               </div>
             </div>
 
-            {/* CARD: Parada no Posto, Abastecimento, Custos e Mapa em Tempo Real */}
+            {/* Parada no Posto e Custos */}
             <div className="bg-[#090f1a]/60 p-5 rounded-2xl border border-[#1b2a4a]/70 space-y-4">
               <h2 className="font-bold text-sm uppercase tracking-wider text-blue-400 mb-3 flex items-center gap-2">
                 ⛽ Parada no Posto e Mapa em Tempo Real
@@ -399,7 +405,6 @@ export default function ChecklistMotorista() {
                 </div>
               </div>
 
-              {/* MAPA INTERATIVO EM TEMPO REAL */}
               {coordsGPS && (
                 <div className="mt-3 overflow-hidden rounded-2xl border border-[#23375c] shadow-lg">
                   <div className="bg-[#131d31] px-3 py-2 text-xs font-semibold text-slate-300 flex justify-between items-center">
@@ -419,7 +424,6 @@ export default function ChecklistMotorista() {
                 </div>
               )}
 
-              {/* Bloco com os Cálculos Automáticos Separados */}
               <div className="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <div className="p-3 bg-[#0c182c] border border-blue-900/40 rounded-xl text-center">
                   <span className="text-[11px] text-blue-300 font-bold uppercase tracking-wider block">Média do Veículo</span>
