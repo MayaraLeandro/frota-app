@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { QRCodeSVG } from "qrcode.react";
+import Image from "next/image";
 
 export default function ChecklistMotorista() {
   const [placa, setPlaca] = useState("");
@@ -105,20 +106,23 @@ export default function ChecklistMotorista() {
     <main className="min-h-screen bg-[#070b14] p-4 sm:p-8 text-slate-100 flex items-center justify-center font-sans">
       <div className="max-w-4xl w-full bg-[#0e1626] rounded-3xl shadow-2xl p-6 sm:p-10 border border-[#1b2a4a]">
         
-        {/* CABEÇALHO COM IDENTIDADE DA LOGO NJ TRANSPORTES */}
+        {/* CABEÇALHO COM A LOGO OFICIAL DA NJ TRANSPORTES */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 pb-6 border-b border-[#1b2a4a]">
           <div className="flex items-center gap-4">
-            {/* Logo estilizada NJ baseada na marca do cliente */}
-            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#102a5c] to-[#07132b] border border-[#23427f] flex items-center justify-center shadow-lg shadow-blue-950/50">
-              <span className="text-2xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-200" style={{ fontFamily: 'serif' }}>
-                NJ
-              </span>
+            <div className="bg-white p-2 rounded-2xl border border-[#23427f] flex items-center justify-center w-28 h-20 relative shadow-md">
+              <Image 
+                src="/logo.png" 
+                alt="Logo NJ Transportes" 
+                fill
+                className="object-contain"
+                priority
+              />
             </div>
             <div>
-              <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-wide">
-                NJ <span className="text-blue-400 font-light text-xl">TRANSPORTES</span>
+              <h1 className="text-xl sm:text-2xl font-extrabold text-white tracking-wide">
+                NJ TRANSPORTES
               </h1>
-              <p className="text-xs text-slate-400 tracking-wider uppercase font-medium mt-0.5">
+              <p className="text-xs text-blue-400 tracking-wider uppercase font-medium mt-0.5">
                 Painel Inteligente de Checklist e Frota
               </p>
             </div>
