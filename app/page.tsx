@@ -105,23 +105,15 @@ export default function ChecklistMotorista() {
     <main className="min-h-screen bg-[#070b14] p-4 sm:p-8 text-slate-100 flex items-center justify-center font-sans">
       <div className="max-w-4xl w-full bg-[#0e1626] rounded-3xl shadow-2xl p-6 sm:p-10 border border-[#1b2a4a]">
         
-        {/* CABEÇALHO COM IDENTIDADE DA LOGO NJ TRANSPORTES */}
+        {/* CABEÇALHO APENAS COM O TEXTO TRANSPORTES NJ */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 pb-6 border-b border-[#1b2a4a]">
-          <div className="flex items-center gap-4">
-            {/* Logo estilizada NJ baseada na marca do cliente */}
-            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#102a5c] to-[#07132b] border border-[#23427f] flex items-center justify-center shadow-lg shadow-blue-950/50">
-              <span className="text-2xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-200" style={{ fontFamily: 'serif' }}>
-                NJ
-              </span>
-            </div>
-            <div>
-              <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-wide">
-                NJ TRANSPORTES
-              </h1>
-              <p className="text-xs text-slate-400 tracking-wider uppercase font-medium mt-0.5">
-                Painel Inteligente de Checklist e Frota
-              </p>
-            </div>
+          <div>
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-wide">
+              TRANSPORTES NJ
+            </h1>
+            <p className="text-xs text-slate-400 tracking-wider uppercase font-medium mt-0.5">
+              Painel Inteligente de Checklist e Frota
+            </p>
           </div>
           
           <button
