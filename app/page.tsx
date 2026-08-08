@@ -19,6 +19,13 @@ export default function ChecklistMotorista() {
   const [fotoParaBrisas, setFotoParaBrisas] = useState<string | null>(null);
   const [fotoFunilaria, setFotoFunilaria] = useState<string | null>(null);
 
+  // Estados do Posto / Abastecimento
+  const [kmAbastecimento, setKmAbastecimento] = useState("");
+  const [litrosAbastecidos, setLitrosAbastecidos] = useState("");
+  const [localizacaoPosto, setLocalizacaoPosto] = useState("");
+  const [buscandoLocal, setBuscandoLocal] = useState(false);
+  const [custoOleoViagem, setCustoOleoViagem] = useState("");
+
   const [manutencaoNecessaria, setManutencaoNecessaria] = useState("nao");
   const [detalhesManutencao, setDetalhesManutencao] = useState("");
 
@@ -29,6 +36,44 @@ export default function ChecklistMotorista() {
   const [observacoes, setObservacoes] = useState("");
   const [enviado, setEnviado] = useState(false);
   const [mostrarQrCode, setMostrarQrCode] = useState(false);
+
+  // Cálculo automático da média (KM atual - KM anterior ou KM do abastecimento vs KM inicial)
+  const calcularMedia = () => {
+    const kmAtualNum = parseFloat(km);
+    const kmAbastNum = parseFloat(kmAbastecimento);
+    const litrosNum = parseFloat(litrosAbastecidos);
+
+    if (!litrosNum || litrosNum <= 0) return "0.00";
+
+    // Se informou o KM do abastecimento e o KM atual do veículo
+    if (kmAtualNum && kmAbastNum && kmAtualNum >= kmAbastNum) {
+      const rodados = kmAtualNum - kmAbastNum;
+      return (rodados / litrosNum).toFixed(2);
+    }
+    return "0.00";
+  };
+
+  const mediaCalculada = calcularMedia();
+
+  const obterLocalizacaoGPS = () => {
+    if (!navigator.geolocation) {
+      alert("Geolocalização não é suportada pelo seu navegador.");
+      return;
+    }
+    setBuscandoLocal(true);
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const lat = position.coords.latitude;
+        const lon = position.coords.longitude;
+        setLocalizacaoPosto(`Lat: ${lat.toFixed(4)}, Lon: ${lon.toFixed(4)}`);
+        setBuscandoLocal(false);
+      },
+      () => {
+        alert("Não foi possível obter a localização. Verifique as permissões do GPS.");
+        setBuscandoLocal(false);
+      }
+    );
+  };
 
   const handleFotoChange = (e: React.ChangeEvent<HTMLInputElement>, setFoto: (val: string | null) => void) => {
     const file = e.target.files?.[0];
@@ -58,7 +103,7 @@ export default function ChecklistMotorista() {
               <span className="text-blue-500 bg-blue-500/10 p-2 rounded-xl">🚛</span> Controle de Frota
             </h1>
             <p className="text-sm text-slate-400 mt-1">
-              Painel Inteligente de Checklist Diário do Motorista
+              Painel Inteligente de Checklist Diário e Paradas
             </p>
           </div>
           
@@ -85,8 +130,8 @@ export default function ChecklistMotorista() {
 
         {enviado ? (
           <div className="bg-emerald-950/40 border border-emerald-500/30 text-emerald-300 p-8 rounded-2xl text-center">
-            <h2 className="font-bold text-2xl mb-2">Checklist Enviado com Sucesso!</h2>
-            <p className="text-sm text-emerald-400/80 mb-6">O veículo foi liberado para a operação de hoje.</p>
+            <h2 className="font-bold text-2xl mb-2">Checklist e Posto Registrados com Sucesso!</h2>
+            <p className="text-sm text-emerald-400/80 mb-6">Os dados da viagem e abastecimento foram salvos.</p>
             <button
               onClick={() => setEnviado(false)}
               className="bg-emerald-600 hover:bg-emerald-500 text-white px-6 py-3 rounded-xl font-semibold text-sm transition shadow-lg"
@@ -126,7 +171,7 @@ export default function ChecklistMotorista() {
               </div>
             </div>
 
-            {/* Itens de Inspeção com Ícone de Câmera Discreto */}
+            {/* Itens de Inspeção com Câmera Discreta */}
             <div className="bg-slate-900/50 p-5 rounded-2xl border border-slate-800/80 space-y-4">
               <h2 className="font-bold text-sm uppercase tracking-wider text-slate-400 mb-3">
                 Itens de Inspeção Diária:
@@ -237,6 +282,91 @@ export default function ChecklistMotorista() {
               </div>
             </div>
 
+            {/* NOVO CARD: Parada no Posto e Abastecimento */}
+            <div className="bg-slate-900/50 p-5 rounded-2xl border border-slate-800/80 space-y-4">
+              <h2 className="font-bold text-sm uppercase tracking-wider text-blue-400 mb-3 flex items-center gap-2">
+                ⛽ Parada no Posto / Abastecimento
+              </h2>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">
+                    KM do Abastecimento
+                  </label>
+                  <input
+                    type="number"
+                    placeholder="Ex: 149500"
+                    value={kmAbastecimento}
+                    onChange={(e) => setKmAbastecimento(e.target.value)}
+                    className="w-full p-3 bg-slate-800 border border-slate-700 rounded-xl text-sm text-white focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-slate-500 font-semibold"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">
+                    Litros Abastecidos
+                  </label>
+                  <input
+                    type="number"
+                    step="0.01"
+                    placeholder="Ex: 150.5"
+                    value={litrosAbastecidos}
+                    onChange={(e) => setLitrosAbastecidos(e.target.value)}
+                    className="w-full p-3 bg-slate-800 border border-slate-700 rounded-xl text-sm text-white focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-slate-500 font-semibold"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">
+                    Localização do Posto (GPS)
+                  </label>
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      readOnly
+                      placeholder="Clique no botão ao lado"
+                      value={localizacaoPosto}
+                      className="w-full p-3 bg-slate-800 border border-slate-700 rounded-xl text-xs text-slate-300 focus:outline-none"
+                    />
+                    <button
+                      type="button"
+                      onClick={obterLocalizacaoGPS}
+                      className="bg-blue-600 hover:bg-blue-500 text-white px-4 rounded-xl text-xs font-semibold transition shrink-0"
+                    >
+                      {buscandoLocal ? "Buscando..." : "📍 Maps"}
+                    </button>
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">
+                    Preço Gasto com Óleo/Combustível na Viagem (R$)
+                  </label>
+                  <input
+                    type="number"
+                    step="0.01"
+                    placeholder="Ex: 750.00"
+                    value={custoOleoViagem}
+                    onChange={(e) => setCustoOleoViagem(e.target.value)}
+                    className="w-full p-3 bg-slate-800 border border-slate-700 rounded-xl text-sm text-white focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-slate-500 font-semibold"
+                  />
+                </div>
+              </div>
+
+              {/* Média Calculada Automaticamente */}
+              <div className="mt-4 p-4 bg-blue-950/30 border border-blue-500/30 rounded-xl flex items-center justify-between">
+                <div>
+                  <span className="text-xs text-blue-300 font-bold uppercase tracking-wider">Média Calculada pelo App:</span>
+                  <p className="text-xs text-slate-400">Baseada na quilometragem rodada e litros informados</p>
+                </div>
+                <div className="text-right">
+                  <span className="text-2xl font-extrabold text-blue-400">{mediaCalculada}</span>
+                  <span className="text-xs text-slate-300 ml-1">KM/L</span>
+                </div>
+              </div>
+            </div>
+
             <div className="bg-slate-900/50 p-5 rounded-2xl border border-slate-800/80">
               <label className="block font-bold text-sm uppercase tracking-wider text-slate-400 mb-2">
                 Manutenção a Fazer?
@@ -315,7 +445,7 @@ export default function ChecklistMotorista() {
               type="submit"
               className="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-4 rounded-2xl transition shadow-xl text-base flex items-center justify-center gap-2 mt-4"
             >
-              🚀 Salvar Checklist
+              🚀 Salvar Checklist e Parada no Posto
             </button>
 
           </form>
