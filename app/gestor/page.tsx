@@ -1,23 +1,14 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { supabase } from '@/supabaseClient'
-
-interface Checklist {
-  id: string
-  criado_em: string
-  placa: string
-  km: number
-  observacoes: string
-}
 
 export default function PainelGestor() {
   const [autenticado, setAutenticado] = useState(false)
   const [senhaInput, setSenhaInput] = useState('')
-  const [checklists, setChecklists] = useState<Checklist[]>([])
+  const [checklists, setChecklists] = useState<any[]>([])
   const [carregando, setCarregando] = useState(false)
 
-  // SENHA INICIAL PADRÃO (Você pode alterar depois se quiser)
   const SENHA_MESTRE = 'admin123'
 
   function fazerLogin(e: React.FormEvent) {
@@ -45,7 +36,6 @@ export default function PainelGestor() {
     setCarregando(false)
   }
 
-  // TELA DE LOGIN COM O NOME NJ TRANSPORTES
   if (!autenticado) {
     return (
       <main className="min-h-screen bg-slate-950 flex items-center justify-center p-4">
@@ -74,13 +64,12 @@ export default function PainelGestor() {
               Entrar no Painel
             </button>
           </form>
-          <p className="text-xs text-center text-slate-500">Senha inicial padrão configurada: <span className="text-emerald-400 font-mono">admin123</span></p>
+          <p className="text-xs text-center text-slate-500">Senha inicial padrão: <span className="text-emerald-400 font-mono">admin123</span></p>
         </div>
       </main>
     )
   }
 
-  // PAINEL DO GESTOR APÓS O LOGIN
   return (
     <main className="min-h-screen bg-slate-950 text-slate-100 p-6">
       <div className="max-w-6xl mx-auto">
@@ -110,7 +99,7 @@ export default function PainelGestor() {
                 <div className="flex justify-between items-center border-b border-slate-800 pb-3">
                   <span className="text-lg font-bold text-emerald-400">Placa: {item.placa}</span>
                   <span className="text-xs text-slate-500">
-                    {new Date(item.criado_em).toLocaleString('pt-BR')}
+                    {item.criado_em ? new Date(item.criado_em).toLocaleString('pt-BR') : ''}
                   </span>
                 </div>
                 <div className="text-sm space-y-1">
