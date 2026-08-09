@@ -1,89 +1,37 @@
 'use client'
 
-import { useState } from 'react'
-import { supabase } from '@/supabaseClient'
+import { useEffect, useState } from 'react'
+import { createClient } from '@supabase/supabase-js'
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+const supabase = createClient(supabaseUrl, supabaseAnonKey)
 
 export default function PainelGestor() {
-  const [autenticado, setAutenticado] = useState(false)
-  const [senhaInput, setSenhaInput] = useState('')
   const [checklists, setChecklists] = useState<any[]>([])
-  const [carregando, setCarregando] = useState(false)
+  const [carregando, setCarregando] = useState(true)
 
-  const SENHA_MESTRE = 'admin123'
+  useEffect(() => {
+    async function carregarDados() {
+      const { data, error } = await supabase
+        .from('checklists')
+        .select('*')
+        .order('criado_em', { ascending: false })
 
-  function fazerLogin(e: React.FormEvent) {
-    e.preventDefault()
-    if (senhaInput === SENHA_MESTRE) {
-      setAutenticado(true)
-      carregarDados()
-    } else {
-      alert('Senha incorreta! A senha inicial padrão é: admin123')
+      if (!error) {
+        setChecklists(data || [])
+      }
+      setCarregando(false)
     }
-  }
-
-  async function carregarDados() {
-    setCarregando(true)
-    const { data, error } = await supabase
-      .from('checklists')
-      .select('*')
-      .order('criado_em', { ascending: false })
-
-    if (error) {
-      console.error('Erro ao buscar dados:', error.message)
-    } else {
-      setChecklists(data || [])
-    }
-    setCarregando(false)
-  }
-
-  if (!autenticado) {
-    return (
-      <main className="min-h-screen bg-slate-950 flex items-center justify-center p-4">
-        <div className="bg-slate-900 border border-slate-800 p-8 rounded-2xl w-full max-w-md shadow-2xl space-y-6">
-          <div className="text-center space-y-2">
-            <h1 className="text-2xl font-bold text-emerald-400">NJ Transportes</h1>
-            <p className="text-sm text-slate-400">Painel do Gestor - Digite a senha para acessar</p>
-          </div>
-
-          <form onSubmit={fazerLogin} className="space-y-4">
-            <div>
-              <label className="block text-xs font-semibold text-slate-400 mb-1">SENHA DE ACESSO</label>
-              <input
-                type="password"
-                value={senhaInput}
-                onChange={(e) => setSenhaInput(e.target.value)}
-                placeholder="Digite a senha (admin123)"
-                className="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-emerald-500"
-                required
-              />
-            </div>
-            <button
-              type="submit"
-              className="w-full bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold py-3 rounded-lg transition-colors"
-            >
-              Entrar no Painel
-            </button>
-          </form>
-          <p className="text-xs text-center text-slate-500">Senha inicial padrão: <span className="text-emerald-400 font-mono">admin123</span></p>
-        </div>
-      </main>
-    )
-  }
+    carregarDados()
+  }, [])
 
   return (
     <main className="min-h-screen bg-slate-950 text-slate-100 p-6">
       <div className="max-w-6xl mx-auto">
-        <div className="flex justify-between items-center mb-6">
-          <div>
-            <h1 className="text-3xl font-bold text-emerald-400">NJ Transportes - Painel do Gestor</h1>
-            <p className="text-slate-400">Acompanhe em tempo real os checklists enviados pelos motoristas.</p>
-          </div>
-          <button
-            onClick={() => setAutenticado(false)}
-            className="bg-red-500/10 border border-red-500/20 text-red-400 px-4 py-2 rounded-lg text-sm hover:bg-red-500/20 transition-colors"
-          >
-            Sair
-          </button>
+        <div className="mb-6">
+          <h1 className="text-3xl font-bold text-emerald-400">NJ Transportes - Painel do Gestor</h1>
+          <p className="text-slate-400">Acompanhe em tempo real os checklists enviados pelos motoristas.</p>
         </div>
 
         {carregando ? (
